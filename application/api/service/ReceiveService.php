@@ -53,4 +53,22 @@ class ReceiveService
                 }*/
     }
 
+
+    /**
+     * @param $imei
+     * @param $startTime
+     * @param $endTime
+     * @param $page
+     * @param $size
+     * @return \think\Paginator
+     * @throws \think\exception\DbException
+     */
+    public static function getList($imei, $startTime, $endTime, $page, $size)
+    {
+        $list = ReceiveT::getList($imei, $startTime, $endTime, $page, $size);
+        return $list;
+
+
+    }
+
 }
