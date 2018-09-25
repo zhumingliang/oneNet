@@ -21,9 +21,9 @@ class ReceiveService
      */
     public static function save($msg_arr)
     {
-        echo count($msg_arr);
+
         if (count($msg_arr) == 1) {
-            if (key_exists('login_type', $msg_arr)) {
+            if (isset($msg_arr['login_type'])) {
                 LoginT::create($msg_arr);
 
             } else {
@@ -34,7 +34,7 @@ class ReceiveService
             $data_login = [];
             $data_receive = [];
             foreach ($msg_arr as $v) {
-                if (key_exists('login_type', $v)) {
+                if (isset($v['login_type'])) {
                     array_push($data_login, $v);
 
                 } else {
