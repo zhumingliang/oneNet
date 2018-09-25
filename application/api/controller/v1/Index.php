@@ -16,8 +16,10 @@ class Index
          * Step2, directly to resolve the body, if it is the first time to verify the signature, the raw_input is empty, by the resolveBody method to automatically determine, it's relied on $ _GET
          */
         $resolved_body = Util::resolveBody($raw_input);
-        var_dump($resolved_body);
+
+        $resolved_body = json_encode((object)$resolved_body);
         $data['msg'] = $resolved_body;
+
         TestT::create($data);
 
         echo $resolved_body;
