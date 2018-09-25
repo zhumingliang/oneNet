@@ -2,6 +2,7 @@
 
 namespace app\api\controller\v1;
 
+use app\api\model\TestT;
 use app\api\service\ReceiveService;
 use app\api\service\Util;
 
@@ -21,8 +22,14 @@ class Index
             echo $resolved_body;
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            //接受post数据
-            ReceiveService::save($resolved_body);
+            if (!$resolved_body){
+                TestT::create(['msg'=>"数据为空"]);
+
+            }else{
+                //接受post数据
+                ReceiveService::save($resolved_body);
+            }
+
         }
 
 
