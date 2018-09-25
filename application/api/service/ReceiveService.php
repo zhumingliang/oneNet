@@ -11,6 +11,7 @@ namespace app\api\service;
 
 use app\api\model\LoginT;
 use app\api\model\ReceiveT;
+use app\api\model\TestT;
 
 class ReceiveService
 {
@@ -19,8 +20,9 @@ class ReceiveService
      * @param $msg_arr
      * @throws \Exception
      */
-    public static function save($msg_arr)
-    {
+    public static function save($msg_arr){
+        TestT::create(['msg'=> json_encode($msg_arr)]);
+        TestT::create(['msg'=> count($msg_arr)]);
 
         if (count($msg_arr) == 1) {
             if (isset($msg_arr['login_type'])) {
