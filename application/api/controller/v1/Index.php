@@ -20,7 +20,7 @@ class Index
         $resolved_body = json_encode((object)$resolved_body);
         $data['msg'] = $resolved_body;
 
-        TestT::create($data);
+        //TestT::create($data);
 
         echo $resolved_body;
 
