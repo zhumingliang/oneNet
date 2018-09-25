@@ -21,7 +21,7 @@ class ReceiveService
      */
     public static function save($msg_arr)
     {
-        print_r($msg_arr);
+        echo count($msg_arr);
         if (count($msg_arr) == 1) {
             if (key_exists('login_type', $msg_arr)) {
                 LoginT::create($msg_arr);
