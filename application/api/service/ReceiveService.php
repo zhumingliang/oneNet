@@ -72,7 +72,6 @@ class ReceiveService
     }
 
 
-
     public static function sendToOneNet()
     {
         try {
@@ -84,9 +83,10 @@ class ReceiveService
             $header[] = "Content-Type: application/json";
             $header[] = "Host: api.heclouds.com";
             //填写自己的api-key号
-            $content = "0.3A0.2A5A190A";
+            $data = ['value' => "0.3A0.2A5A190A"];
+            $content = json_encode($data);
 
-            $output =self::post($url, $header, $content);
+            $output = self::post($url, $header, $content);
             $output_array = json_decode($output, true);
             print_r($output_array);
         } catch (Exception $e) {
