@@ -18,6 +18,7 @@ Route::get('hello/:name', 'index/hello');
 Route::rule('api/:version/index', 'api/:version.Index/index');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
 Route::get('api/:version/receive/recent', 'api/:version.Index/getRecent');
+Route::post('api/:version/receive/send', 'api/:version.Index/send');
 
 
 

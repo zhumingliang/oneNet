@@ -73,4 +73,10 @@ class Index
     }
 
 
+    public function send()
+    {
+        ReceiveService::sendToOneNet();
+    }
+
+
 }
