@@ -78,14 +78,13 @@ class ReceiveService
         try {
 
 
-            $url = 'http://api.heclouds.com/devices/44631936/datapoints?type=3';
+            $url = 'http://api.heclouds.com/devices/44631936/datapoints?type=1';
             //*****处填写自己的设备ID号
             $header[] = "api-key:MRee0TFqxdtK2bsbyiFLgpmukSY=";
             $header[] = "Content-Type: application/json";
             $header[] = "Host: api.heclouds.com";
             //填写自己的api-key号
             $content = "0.3A0.2A5A190A";
-            //向OneNET发送的数据JSON格式
 
             $output =self::post($url, $header, $content);
             $output_array = json_decode($output, true);
