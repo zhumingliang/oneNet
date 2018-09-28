@@ -78,7 +78,7 @@ class ReceiveService
 
 
             //$url = 'http://api.heclouds.com/devices/44631936/datapoints?type=1';
-            $url = "http://api.heclouds.com/nbiot?imei=8658200300139788&obj_id=3300&obj_inst_id=0&mode=2 HTTP/1.1";
+            $url = "http://api.heclouds.com/nbiot?imei=865820031313187&obj_id=3300&obj_inst_id=0&mode=2 HTTP/1.1";
             //*****处填写自己的设备ID号
             $header[] = "api-key:MRee0TFqxdtK2bsbyiFLgpmukSY=";
             $header[] = "Content-Type: application/json";
