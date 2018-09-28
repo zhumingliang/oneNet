@@ -86,17 +86,24 @@ class ReceiveService
                         'val' => "0.3A0.2A5A190A"]
                 ];*/
 
+            $content = new \stdClass();
+            $param = new \stdClass();
+            $param->res_id = 5750;
+            $param->val = "0.3A0.2A5A190A";
+            $content->data = [
+                0 => $param
+            ];
 
-            $content = '{
-    "data":[
-        {
-            "res_id":5750,
-            "val":"0.3A0.2A5A190A"
-        }
-    ]
-}';
+            /*            $content = '{
+                "data":[
+                    {
+                        "res_id":5750,
+                        "val":"0.3A0.2A5A190A"
+                    }
+                ]
+            }';*/
 
-            print_r(json_decode($content));
+            var_dump(json_encode($content));
 //            $output = self::post($url, $header, $content);
 //            TestT::create(['msg' => $output]);
 //            $output_array = json_decode($output, true);
