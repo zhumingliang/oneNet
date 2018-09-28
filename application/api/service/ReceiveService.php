@@ -81,12 +81,20 @@ class ReceiveService
             $header[] = "Content-Type: application/json";
             $header[] = "Host: api.heclouds.com";
             //填写自己的api-key号
-            $data = [
-                'data' => ['res_id' => 5750,
-                    'val' => "0.3A0.2A5A190A"]
-            ];
-            $content = json_encode($data);
-            echo $content;
+            /*    $data = [
+                    'data' => ['res_id' => 5750,
+                        'val' => "0.3A0.2A5A190A"]
+                ];*/
+
+
+            $content = '{
+    "data":[
+        {
+            "res_id":5750,
+            "val":"0.3A0.2A5A190A"
+        }
+    ]
+}';
             $output = self::post($url, $header, $content);
             TestT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
