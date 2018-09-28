@@ -85,7 +85,6 @@ class ReceiveService
                 'data' => ['res_id' => 5750,
                     'val' => "0.3A0.2A5A190A"]
             ];
-            echo $data;
             $content = json_encode($data);
             echo $content;
             $output = self::post($url, $header, $content);
