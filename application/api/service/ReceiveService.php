@@ -87,7 +87,7 @@ class ReceiveService
             ];
             echo $data;
             $content = json_encode($data);
-
+            echo $content;
             $output = self::post($url, $header, $content);
             TestT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
