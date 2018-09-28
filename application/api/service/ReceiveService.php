@@ -96,7 +96,7 @@ class ReceiveService
     ]
 }';
 
-            echo json_decode($content);
+            print_r(json_decode($content));
 //            $output = self::post($url, $header, $content);
 //            TestT::create(['msg' => $output]);
 //            $output_array = json_decode($output, true);
