@@ -95,10 +95,12 @@ class ReceiveService
         }
     ]
 }';
-            $output = self::post($url, $header, $content);
-            TestT::create(['msg' => $output]);
-            $output_array = json_decode($output, true);
-            print_r($output_array);
+
+            echo json_decode($content);
+//            $output = self::post($url, $header, $content);
+//            TestT::create(['msg' => $output]);
+//            $output_array = json_decode($output, true);
+//            print_r($output_array);
         } catch (Exception $e) {
 
             TestT::create(['msg' => $e->getMessage()]);
