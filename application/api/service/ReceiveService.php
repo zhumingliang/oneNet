@@ -11,7 +11,8 @@ namespace app\api\service;
 
 use app\api\model\LoginT;
 use app\api\model\ReceiveT;
-use app\api\model\TestT;
+use app\api\model\LogT;
+use app\lib\exception\OneNetException;
 use think\Exception;
 
 class ReceiveService
@@ -23,35 +24,64 @@ class ReceiveService
      */
     public static function save($msg_arr)
     {
-        //if (count($msg_arr) == 1) {
-        if (isset($msg_arr['login_type'])) {
-            LoginT::create($msg_arr);
-        } else {
-            ReceiveT::create($msg_arr);
+        try {
+            if (isset($msg_arr['login_type'])) {
+                if (!LoginT::create($msg_arr)) {
+                    LogT::create(['msg' => '存储登录信息失败']);
+                }
+                if ($msg_arr['status'] == 1) {
+                    //发送初始化信息
+                    $params = [
+                        'imei' => config('onenet.imei'),
+                        'obj_id' => config('onenet.obj_id'),
+                        'obj_inst_id' => config('onenet.obj_inst_id'),
+                        'res_id' => config('onenet.res_id'),
+                        'X' => config('onenet.X'),
+                        'Y' => config('onenet.Y'),
+                        'threshold' => config('onenet.threshold'),
+                        'interval' => config('onenet.interval'),
+
+                    ];
+                    self::sendToOneNet($params);
+                }
+
+            } else {
+                ReceiveT::create($msg_arr);
+            }
+        } catch (Exception $e) {
+            LogT::create(['msg' => '接受数据失败，原因：' . $e->getMessage()]);
         }
+
         /*
-                } else {
-                    $data_login = [];
-                    $data_receive = [];
-                    foreach ($msg_arr as $v) {
-                        if (isset($v['login_type'])) {
-                            array_push($data_login, $v);
+       //if (count($msg_arr) == 1) {
+       if (isset($msg_arr['login_type'])) {
+           LoginT::create($msg_arr);
+       } else {
+           ReceiveT::create($msg_arr);
+       }
 
-                        } else {
-                            array_push($data_receive, $v);
-                        }
-                    }
-                    if (count($data_login)) {
-                        $login = new LoginT();
-                        $login->saveAll($data_login);
+               } else {
+                   $data_login = [];
+                   $data_receive = [];
+                   foreach ($msg_arr as $v) {
+                       if (isset($v['login_type'])) {
+                           array_push($data_login, $v);
 
-                    }
-                    if (count($data_receive)) {
-                        $login = new LoginT();
-                        $login->saveAll($data_receive);
+                       } else {
+                           array_push($data_receive, $v);
+                       }
+                   }
+                   if (count($data_login)) {
+                       $login = new LoginT();
+                       $login->saveAll($data_login);
 
-                    }
-                }*/
+                   }
+                   if (count($data_receive)) {
+                       $login = new LoginT();
+                       $login->saveAll($data_receive);
+
+                   }
+               }*/
     }
 
 
@@ -72,30 +102,37 @@ class ReceiveService
     }
 
 
-    public static function sendToOneNet()
+    /**
+     *向传感器发送数据
+     * @param $params
+     * @return mixed
+     */
+    public static function sendToOneNet($params)
     {
         try {
             //$url = 'http://api.heclouds.com/devices/44631936/datapoints?type=1';
-            $url = "http://api.heclouds.com/nbiot?imei=865820031289270&obj_id=3300&obj_inst_id=0&mode=2";
-            $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
-            $header[] = "Content-Type: application/json";
-            $header[] = "Host: api.heclouds.com";
+            /* $url = "http://api.heclouds.com/nbiot?imei=865820031289270&obj_id=3300&obj_inst_id=0&mode=2";
+             $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
+             $header[] = "Content-Type: application/json";
+             $header[] = "Host: api.heclouds.com";
 
-            $content = new \stdClass();
-            $param = new \stdClass();
-            $param->res_id = 5750;
-            $param->val = "0.3A0.2A5A190A";
-            $content->data = [
-                0 => $param
-            ];
-            $content = json_encode($content);
-            $output = self::post($url, $header, $content);
-            TestT::create(['msg' => $output]);
+             $content = new \stdClass();
+             $param = new \stdClass();
+             $param->res_id = 5750;
+             $param->val = "0.3A0.2A5A190A";
+             $content->data = [
+                 0 => $param
+             ];
+             $content = json_encode($content);*/
+            $sendParams = self::preParams($params['imei'], $params['obj_id'], $params['obj_inst_id'],
+                $params['res_id'], $params['X'], $params['Y'], $params['threshold'], $params['interval']);
+            $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
+            LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
-            print_r($output_array);
+            return $output_array;
         } catch (Exception $e) {
 
-            TestT::create(['msg' => $e->getMessage()]);
+            LogT::create(['msg' => $e->getMessage()]);
         }
     }
 
@@ -133,7 +170,7 @@ class ReceiveService
      * @param $interval
      * @return array
      */
-    private static function preParams($imei = "86582003131318", $obj_id = 3300, $obj_inst_id = 0, $res_id = 5750,
+    private static function preParams($imei, $obj_id, $obj_inst_id, $res_id,
                                       $X, $Y, $threshold, $interval)
     {
         $url = config('onenet.send_url');
@@ -148,7 +185,7 @@ class ReceiveService
 
         $content = new \stdClass();
         $param = new \stdClass();
-        $param->res_id = 5750;
+        $param->res_id = $res_id;
         $param->val = $val;
         $content->data = [
             0 => $param

@@ -10,7 +10,7 @@ namespace app\api\controller\v1;
 
 
 use app\api\model\AdminT;
-use app\api\model\TestT;
+use app\api\model\LogT;
 use app\api\service\AdminToken;
 use app\api\service\UserInfoService;
 use app\api\service\WxTemplate;

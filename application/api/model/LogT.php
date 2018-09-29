@@ -11,7 +11,7 @@ namespace app\api\model;
 
 use think\Model;
 
-class TestT extends Model
+class LogT extends Model
 {
 
 }
