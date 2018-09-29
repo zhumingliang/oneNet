@@ -116,6 +116,7 @@ class Index extends BaseController
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
      * @apiExample {get}  请求样例:
      * http://oil.mengant.cn/api/v1/receive/send?X=0.1&Y=0.2&threshold=5&interval=180
+     *
      * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
      * @apiParam (请求参数说明) {float} X  X倾角
      * @apiParam (请求参数说明) {float} Y  Y倾角
