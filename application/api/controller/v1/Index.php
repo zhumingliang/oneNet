@@ -132,7 +132,7 @@ class Index extends BaseController
      */
     public function send()
     {
-        (new  OneNetValidate())->scene('list')->goCheck();
+        (new  OneNetValidate())->scene('send')->goCheck();
         $param = $this->request->param();
         $params = [
             'imei' => config('onenet.imei'),
