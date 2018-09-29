@@ -29,7 +29,7 @@ class ReceiveT extends Model
         $time_end = date("Y-m-d", strtotime($endTime));
         $pagingData = self::where('imei', '=', $imei)
             ->whereBetweenTime('create_time', $time_begin, $time_end)
-            ->hidden('update_time')
+            ->hidden(['update_time'])
             ->order('create_time desc')
             ->paginate($size, false, ['page' => $page]);
         return $pagingData;
@@ -47,7 +47,7 @@ class ReceiveT extends Model
     {
         $data = self::where('imei', '=', $imei)
             ->order('create_time desc')
-            ->hidden('update_time')
+            ->hidden(['update_time'])
             ->find();
 
         return $data;
