@@ -3,6 +3,7 @@
 namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
+use app\api\model\InitT;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
 use app\api\service\ReceiveService;
@@ -134,11 +135,13 @@ class Index extends BaseController
     {
         (new  OneNetValidate())->scene('send')->goCheck();
         $param = $this->request->param();
+
+        $init = InitT::getInit();
         $params = [
-            'imei' => config('onenet.imei'),
-            'obj_id' => config('onenet.obj_id'),
-            'obj_inst_id' => config('onenet.obj_inst_id'),
-            'res_id' => config('onenet.res_id'),
+            'imei' => $init['imei'],
+            'obj_id' => $init['obj_id'],
+            'obj_inst_id' => $init['obj_inst_id'],
+            'res_id' =>  $init['res_id'],
             'X' => $param['X'],
             'Y' => $param['Y'],
             'threshold' => $param['threshold'],

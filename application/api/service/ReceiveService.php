@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 
+use app\api\model\InitT;
 use app\api\model\LoginT;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
@@ -31,15 +32,16 @@ class ReceiveService
                 }
                 if ($msg_arr['status'] == 1) {
                     //发送初始化信息
+                    $init=InitT::getInit();
                     $params = [
-                        'imei' => config('onenet.imei'),
-                        'obj_id' => config('onenet.obj_id'),
-                        'obj_inst_id' => config('onenet.obj_inst_id'),
-                        'res_id' => config('onenet.res_id'),
-                        'X' => config('onenet.X'),
-                        'Y' => config('onenet.Y'),
-                        'threshold' => config('onenet.threshold'),
-                        'interval' => config('onenet.interval'),
+                        'imei' => $init['imei'],
+                        'obj_id' => $init['obj_id'],
+                        'obj_inst_id' => $init['obj_inst_id'],
+                        'res_id' =>  $init['res_id'],
+                        'X' =>$init['x'],
+                        'Y' =>$init['y'],
+                        'threshold' =>$init['threshold'],
+                        'interval' =>$init['interval'],
 
                     ];
                     self::sendToOneNet($params);
