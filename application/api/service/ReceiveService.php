@@ -76,15 +76,10 @@ class ReceiveService
     {
         try {
             //$url = 'http://api.heclouds.com/devices/44631936/datapoints?type=1';
-            $url = "http://api.heclouds.com/nbiot?imei=865820031313187&obj_id=3300&obj_inst_id=0&mode=2";
+            $url = "http://api.heclouds.com/nbiot?imei=865820031289270&obj_id=3300&obj_inst_id=0&mode=2";
             $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
             $header[] = "Content-Type: application/json";
             $header[] = "Host: api.heclouds.com";
-            //填写自己的api-key号
-            /*    $data = [
-                    'data' => ['res_id' => 5750,
-                        'val' => "0.3A0.2A5A190A"]
-                ];*/
 
             $content = new \stdClass();
             $param = new \stdClass();
@@ -93,15 +88,6 @@ class ReceiveService
             $content->data = [
                 0 => $param
             ];
-
-            /*            $content = '{
-                "data":[
-                    {
-                        "res_id":5750,
-                        "val":"0.3A0.2A5A190A"
-                    }
-                ]
-            }';*/
             $content = json_encode($content);
             $output = self::post($url, $header, $content);
             TestT::create(['msg' => $output]);
@@ -132,6 +118,49 @@ class ReceiveService
         //获取返回的文件流
         curl_close($ch);
         return $response;
+    }
+
+
+    /**
+     * 准备数据
+     * @param string $imei
+     * @param int $obj_id
+     * @param int $obj_inst_id
+     * @param int $res_id
+     * @param $X
+     * @param $Y
+     * @param $threshold
+     * @param $interval
+     * @return array
+     */
+    private static function preParams($imei = "86582003131318", $obj_id = 3300, $obj_inst_id = 0, $res_id = 5750,
+                                      $X, $Y, $threshold, $interval)
+    {
+        $url = config('onenet.send_url');
+        $url = sprintf($url, $imei, $obj_id, $obj_inst_id);
+
+        $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
+        $header[] = "Content-Type: application/json";
+        $header[] = "Host: api.heclouds.com";
+
+        $val = [$X, $Y, $threshold, $interval, "A"];
+        $val = implode('A', $val);
+
+        $content = new \stdClass();
+        $param = new \stdClass();
+        $param->res_id = 5750;
+        $param->val = $val;
+        $content->data = [
+            0 => $param
+        ];
+
+        $content = json_encode($content);
+        return [
+            'url' => $url,
+            'header' => $header,
+            'content' => $content,
+
+        ];
     }
 
 }
