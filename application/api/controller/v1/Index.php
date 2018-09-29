@@ -88,7 +88,7 @@ class Index extends BaseController
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/recent/list?equipmentId=865820031313187
+     * http://oil.mengant.cn/api/v1/receive/recent?equipmentId=865820031313187
      * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
      * @apiSuccessExample {json} 返回样例:
      * {"id":920,"at":"1537991802230","imei":"865820031313187","type":1,"ds_id":"3316_0_5700","value":"4.82","dev_id":"44631936","create_time":"2018-09-27 03:56:42"}
