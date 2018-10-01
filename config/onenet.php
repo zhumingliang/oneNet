@@ -7,7 +7,7 @@
  */
 
 return [
-    'send_url' => "http://api.heclouds.com/nbiot?imei=%s7&obj_id=%s&obj_inst_id=%s&mode=2",
+    'send_url' => "http://api.heclouds.com/nbiot?imei=%s&obj_id=%s&obj_inst_id=%s&mode=2",
     'imei' => '86582003131318',
     'obj_id' => '3300',
     'obj_inst_id' => 0,
