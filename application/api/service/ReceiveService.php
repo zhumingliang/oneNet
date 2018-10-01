@@ -13,7 +13,6 @@ use app\api\model\InitT;
 use app\api\model\LoginT;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
-use app\lib\exception\OneNetException;
 use think\Exception;
 
 class ReceiveService
@@ -32,16 +31,16 @@ class ReceiveService
                 }
                 if ($msg_arr['status'] == 1) {
                     //发送初始化信息
-                    $init=InitT::getInit();
+                    $init = InitT::getInit();
                     $params = [
                         'imei' => $init['imei'],
                         'obj_id' => $init['obj_id'],
                         'obj_inst_id' => $init['obj_inst_id'],
-                        'res_id' =>  $init['res_id'],
-                        'X' =>$init['x'],
-                        'Y' =>$init['y'],
-                        'threshold' =>$init['threshold'],
-                        'interval' =>$init['interval'],
+                        'res_id' => $init['res_id'],
+                        'X' => $init['x'],
+                        'Y' => $init['y'],
+                        'threshold' => $init['threshold'],
+                        'interval' => $init['interval'],
 
                     ];
                     self::sendToOneNet($params);
@@ -128,6 +127,7 @@ class ReceiveService
              $content = json_encode($content);*/
             $sendParams = self::preParams($params['imei'], $params['obj_id'], $params['obj_inst_id'],
                 $params['res_id'], $params['X'], $params['Y'], $params['threshold'], $params['interval']);
+            print_r($sendParams);
             $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
