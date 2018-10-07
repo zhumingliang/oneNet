@@ -113,7 +113,7 @@ class ReceiveService
         try {
             $sendParams = self::preParams($params['imei'], $params['obj_id'], $params['obj_inst_id'],
                 $params['res_id'], $params['X'], $params['Y'], $params['threshold'], $params['interval']);
-           print_r($sendParams);
+
             $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
