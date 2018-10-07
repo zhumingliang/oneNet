@@ -18,6 +18,8 @@ class OneNetValidate extends BaseValidate
         'threshold' => 'require|isNotEmpty',
         'interval' => 'require|isNotEmpty',
         'equipmentId' => 'require|isNotEmpty',
+        'ds_id' => 'require|isNotEmpty',
+        'imei' => 'require|isNotEmpty',
         'startTime' => 'require|isNotEmpty',
         'endTime' => 'require|isNotEmpty',
         'page' => 'isPositiveInteger',
@@ -25,8 +27,8 @@ class OneNetValidate extends BaseValidate
     ];
 
     protected $scene = [
-        'send' => ['X', 'Y', 'threshold', 'interval'],
-        'list' => ['equipmentId', 'startTime', 'endTime','page','size'],
+        'send' => ['ds_id', 'imei', 'X', 'Y', 'threshold', 'interval'],
+        'list' => ['equipmentId', 'startTime', 'endTime', 'page', 'size'],
         'recent' => ['equipmentId']
     ];
 

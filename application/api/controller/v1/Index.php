@@ -7,6 +7,7 @@ use app\api\model\InitT;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
 use app\api\service\ReceiveService;
+use app\api\service\SendService;
 use app\api\service\Util;
 use app\api\validate\OneNetValidate;
 use app\lib\exception\OneNetException;
@@ -116,9 +117,10 @@ class Index extends BaseController
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/send?X=0.1&Y=0.2&threshold=5&interval=180
+     * http://oil.mengant.cn/api/v1/receive/send?ds_id="3300_0_5700"&imei="865820031289270"&X=0.1&Y=0.2&threshold=5&interval=180
      *
-     * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
+     * @apiParam (请求参数说明) {String} ds_id  设备参数组：obj_id/obj_inst_id/res_id 三个参数用"_"连接
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiParam (请求参数说明) {float} X  X倾角
      * @apiParam (请求参数说明) {float} Y  Y倾角
      * @apiParam (请求参数说明) {int} threshold  警告阀值
@@ -135,20 +137,7 @@ class Index extends BaseController
     {
         (new  OneNetValidate())->scene('send')->goCheck();
         $param = $this->request->param();
-
-        $init = InitT::getInit();
-        $params = [
-            'imei' => $init['imei'],
-            'obj_id' => $init['obj_id'],
-            'obj_inst_id' => $init['obj_inst_id'],
-            'res_id' =>  $init['res_id'],
-            'X' => $param['X'],
-            'Y' => $param['Y'],
-            'threshold' => $param['threshold'],
-            'interval' => $param['interval'],
-
-        ];
-        $res = ReceiveService::sendToOneNet($params);
+        $res = SendService::sendToOneNet($param);
         if ($res['errno'] != 0) {
             throw  new OneNetException(['code' => 401,
                 'msg' => '发送数据失败，失败原因：' . $res['error'],
