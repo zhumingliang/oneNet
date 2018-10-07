@@ -112,7 +112,7 @@ class Index extends BaseController
 
 
     /**
-     * @api {GET} /api/v1/receive/send_old  向设备发送指令
+     * @api {GET} /api/v1/receive/send_old  向设备发送指令(旧版本)
      * @apiGroup  API
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
