@@ -167,9 +167,9 @@ class ReceiveService
         $header[] = "Content-Type: application/json";
         $header[] = "Host: api.heclouds.com";
 
-        $val = [$X, $Y, $threshold, $interval, "A"];
+        $val = [$X, $Y, $threshold, $interval];
         $val = implode('A', $val);
-
+        $val .= 'A';
         $content = new \stdClass();
         $param = new \stdClass();
         $param->res_id = $res_id;
