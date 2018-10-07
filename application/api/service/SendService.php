@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 
+use app\api\model\LogT;
 use app\lib\exception\ParameterException;
 
 class SendService
