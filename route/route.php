@@ -19,6 +19,7 @@ Route::rule('api/:version/index', 'api/:version.Index/index');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
 Route::get('api/:version/receive/recent', 'api/:version.Index/getRecent');
 Route::get('api/:version/receive/send', 'api/:version.Index/send');
+Route::get('api/:version/receive/send2', 'api/:version.Index/send2');
 
 
 
