@@ -31,6 +31,7 @@ class SendService
             LogT::create(['msg' => $sendParams['content']]);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
+            print_r($output_array);
             return $output_array;
         } catch (Exception $e) {
 
@@ -103,7 +104,7 @@ class SendService
         $header[] = "Content-Type: application/json";
         $header[] = "Host: api.heclouds.com";
 
-        $val = [$X, $Y, $threshold, $interval, "A"];
+        $val = [$X, $Y, $threshold, $interval];
         $val = implode('A', $val);
 
         $content = new \stdClass();
