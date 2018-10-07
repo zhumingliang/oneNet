@@ -28,10 +28,9 @@ class SendService
             $sendParams = self::preParams($params['imei'], $params['obj_id'], $params['obj_inst_id'],
                 $params['res_id'], $params['X'], $params['Y'], $params['threshold'], $params['interval']);
             $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
-            LogT::create(['msg' => $sendParams['content']]);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
-            print_r($output_array);
+            print_r($sendParams);
             return $output_array;
         } catch (Exception $e) {
 
@@ -106,7 +105,7 @@ class SendService
 
         $val = [$X, $Y, $threshold, $interval];
         $val = implode('A', $val);
-
+        $val .= 'A';
         $content = new \stdClass();
         $param = new \stdClass();
         $param->res_id = $res_id;
