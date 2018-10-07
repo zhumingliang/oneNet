@@ -30,7 +30,6 @@ class SendService
             $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
-            print_r($sendParams);
             return $output_array;
         } catch (Exception $e) {
 
