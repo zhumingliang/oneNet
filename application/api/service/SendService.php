@@ -96,6 +96,9 @@ class SendService
     private static function preParams($imei, $obj_id, $obj_inst_id, $res_id,
                                       $X, $Y, $threshold, $interval)
     {
+
+        $X = sprintf("%.2f", $X) * 100;
+        $Y = sprintf("%.2f", $Y) * 100;
         $url = config('onenet.send_url');
         $url = sprintf($url, $imei, $obj_id, $obj_inst_id);
 
