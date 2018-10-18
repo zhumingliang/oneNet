@@ -13,10 +13,12 @@ class OneNetValidate extends BaseValidate
 {
 
     protected $rule = [
-        'X' => 'require|isNotEmpty',
-        'Y' => 'require|isNotEmpty',
-        'threshold' => 'require|isNotEmpty',
-        'interval' => 'require|isNotEmpty',
+        'X0' => 'require|isNotEmpty',
+        'Y0' => 'require|isNotEmpty',
+        'X1' => 'require|isNotEmpty',
+        'Y1' => 'require|isNotEmpty',
+        'T1' => 'require|isNotEmpty',
+        'T2' => 'require|isNotEmpty',
         'equipmentId' => 'require|isNotEmpty',
         'ds_id' => 'require|isNotEmpty',
         'imei' => 'require|isNotEmpty',
@@ -27,7 +29,7 @@ class OneNetValidate extends BaseValidate
     ];
 
     protected $scene = [
-        'send' => ['ds_id', 'imei', 'X', 'Y', 'threshold', 'interval'],
+        'send' => ['ds_id', 'imei', 'X0', 'Y0', 'X1', 'Y1', 'T1', 'T2'],
         'list' => ['equipmentId', 'startTime', 'endTime', 'page', 'size'],
         'recent' => ['equipmentId']
     ];

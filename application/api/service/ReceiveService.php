@@ -37,10 +37,12 @@ class ReceiveService
                         'obj_id' => $init['obj_id'],
                         'obj_inst_id' => $init['obj_inst_id'],
                         'res_id' => $init['res_id'],
-                        'X' => $init['x'],
-                        'Y' => $init['y'],
-                        'threshold' => $init['threshold'],
-                        'interval' => $init['interval'],
+                        'X0' => $init['x'],
+                        'Y0' => $init['y'],
+                        'X1' => $init['x'],
+                        'Y1' => $init['y'],
+                        'T1' => $init['t1'],
+                        'T2' => $init['t2'],
 
                     ];
                     self::sendToOneNet($params);
@@ -112,7 +114,7 @@ class ReceiveService
     {
         try {
             $sendParams = self::preParams($params['imei'], $params['obj_id'], $params['obj_inst_id'],
-                $params['res_id'], $params['X'], $params['Y'], $params['threshold'], $params['interval']);
+                $params['res_id'], $params['X0'], $params['Y0'], $params['X1'], $params['Y1'], $params['T1'], $params['T2']);
 
             $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             LogT::create(['msg' => $output]);
@@ -148,19 +150,26 @@ class ReceiveService
 
     /**
      * 准备数据
-     * @param string $imei
-     * @param int $obj_id
-     * @param int $obj_inst_id
-     * @param int $res_id
-     * @param $X
-     * @param $Y
-     * @param $threshold
-     * @param $interval
+     * @param $imei
+     * @param $obj_id
+     * @param $obj_inst_id
+     * @param $res_id
+     * @param $X0
+     * @param $Y0
+     * @param $X1
+     * @param $Y1
+     * @param $T1
+     * @param $T2
      * @return array
      */
     private static function preParams($imei, $obj_id, $obj_inst_id, $res_id,
-                                      $X, $Y, $threshold, $interval)
+                                      $X0, $Y0, $X1, $Y1, $T1, $T2)
     {
+
+        $X0 = sprintf("%.2f", $X0) * 100;
+        $Y0 = sprintf("%.2f", $Y0) * 100;
+        $X1 = sprintf("%.2f", $X1) * 100;
+        $Y1 = sprintf("%.2f", $Y1) * 100;
         $url = config('onenet.send_url');
         $url = sprintf($url, $imei, $obj_id, $obj_inst_id);
 
@@ -168,7 +177,7 @@ class ReceiveService
         $header[] = "Content-Type: application/json";
         $header[] = "Host: api.heclouds.com";
 
-        $val = [$X, $Y, $threshold, $interval];
+        $val = [$X0, $Y0, $X1, $Y1, $T1, $T2];
         $val = implode('A', $val);
         $val .= 'A';
         $content = new \stdClass();
