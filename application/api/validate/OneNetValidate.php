@@ -19,7 +19,6 @@ class OneNetValidate extends BaseValidate
         'Y1' => 'require|isNotEmpty',
         'T1' => 'require|isNotEmpty',
         'T2' => 'require|isNotEmpty',
-        'equipmentId' => 'require|isNotEmpty',
         'ds_id' => 'require|isNotEmpty',
         'imei' => 'require|isNotEmpty',
         'startTime' => 'require|isNotEmpty',
@@ -29,9 +28,9 @@ class OneNetValidate extends BaseValidate
     ];
 
     protected $scene = [
-        'send' => ['ds_id', 'imei', 'X0', 'Y0', 'X1', 'Y1', 'T1', 'T2'],
-        'list' => ['equipmentId', 'startTime', 'endTime', 'page', 'size'],
-        'recent' => ['equipmentId']
+        'send' => ['imei', 'X0', 'Y0', 'X1', 'Y1', 'T1', 'T2'],
+        'list' => ['imei', 'startTime', 'endTime', 'page', 'size'],
+        'recent' => ['imei']
     ];
 
 }

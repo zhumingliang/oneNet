@@ -11,31 +11,29 @@
 
 // 应用公共文件
 
-
-function getRandChar($length)
-{
-    $str = null;
-    $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-    $max = strlen($strPol) - 1;
-
-    for ($i = 0;
-         $i < $length;
-         $i++) {
-        $str .= $strPol[rand(0, $max)];
-    }
-
-    return $str;
-}
-
 /**
- * 创建guid
- * @return string
+ * @param $url
+ * @param $header
+ * @param $content
+ * @return mixed
  */
-function guid()
+function post($url, $header, $content)
 {
-    mt_srand((double)microtime() * 10000);
-    $charid = strtoupper(md5(uniqid(rand(), true)));
-    $hyphen = chr(45);
-    $uuid = substr($charid, 0, 8) . $hyphen . substr($charid, 8, 4) . $hyphen . substr($charid, 12, 4) . $hyphen . substr($charid, 16, 4) . $hyphen . substr($charid, 20, 12);
-    return $uuid;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //TRUE-->将curl_exec()获取的信息以字符串返回，而不是直接输出。
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    //启用时会将头文件的信息作为数据流输出
+    curl_setopt($ch, CURLOPT_POST, true);
+    //启用时会发送一个常规的POST请求，类型为：application/x-www-form-urlencoded，就像表单提交的一样
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
+    if (curl_exec($ch) === false) //curl_error()返回当前会话最后一次错误的字符串
+    {
+        die("Curlerror: " . curl_error($ch));
+    }
+    $response = curl_exec($ch);
+    //获取返回的文件流
+    curl_close($ch);
+    return $response;
 }

@@ -50,8 +50,8 @@ class Index extends BaseController
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号，开始时间和截止时间获取历史数据
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/list?equipmentId=865820031313187&startTime=2018-09-20&endTime=2018-10-01&page=1&size=2
-     * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
+     * http://oil.mengant.cn/api/v1/receive/list?imei=865820031313187&startTime=2018-09-20&endTime=2018-10-01&page=1&size=2
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiParam (请求参数说明) {String} startTime   开始时间
      * @apiParam (请求参数说明) {String} endTime  截止时间
      * @apiParam (请求参数说明) {String} page   当前页数
@@ -90,8 +90,8 @@ class Index extends BaseController
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/recent?equipmentId=865820031313187
-     * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
+     * http://oil.mengant.cn/api/v1/receive/recent?imei=865820031313187
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiSuccessExample {json} 返回样例:
      * {"id":920,"at":"1537991802230","imei":"865820031313187","type":1,"ds_id":"3316_0_5700","value":"4.82","dev_id":"44631936","create_time":"2018-09-27 03:56:42"}
      *
@@ -188,7 +188,7 @@ class Index extends BaseController
     {
         (new  OneNetValidate())->scene('send')->goCheck();
         $param = $this->request->param();
-        $res = SendService::sendToOneNet($param);
+        $res = (new SendService())->sendToOneNet($param);
         if ($res['errno'] != 0) {
             throw  new OneNetException(['code' => 401,
                 'msg' => '发送数据失败，失败原因：' . $res['error'],
