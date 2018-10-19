@@ -46,7 +46,7 @@ class SendService
             $sendParams = self::preParams($params['imei'], $params['X0'], $params['Y0'], $params['X1'], $params['Y1'],
                 $params['T1'], $params['T2']);
 
-            $output = self::post($sendParams['url'], $sendParams['header'], $sendParams['content']);
+            $output = post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
             return $output_array;
