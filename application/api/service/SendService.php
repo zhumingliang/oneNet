@@ -37,6 +37,7 @@ class SendService
         $this->obj_id = config('onenet.obj_id');
         $this->obj_inst_id = config('onenet.obj_inst_id');
         $this->res_id = config('onenet.res_id');
+        $this->timeout=config('onenet.timeout');
         $init = $this->getInit();
         $this->X0 = $init['X0'];
         $this->Y0 = $init['Y0'];
