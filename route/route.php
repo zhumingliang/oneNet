@@ -19,7 +19,8 @@ Route::rule('api/:version/index', 'api/:version.Index/index');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
 Route::get('api/:version/receive/recent', 'api/:version.Index/getRecent');
 Route::get('api/:version/receive/send', 'api/:version.Index/send');
-Route::get('api/:version/receive/send/old', 'api/:version.Index/send_old');
+Route::get('api/:version/send/pending/test', 'api/:version.Index/savePendingTest');
+Route::post('api/:version/send/pending', 'api/:version.Index/savePending');
 
 
 

@@ -117,7 +117,7 @@ class Index extends BaseController
      * @apiVersion 1.0.1
      * @apiDescription 测试接口：将发送信息缓存，等待设备下一次启动时发送
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/send?imei=865820031289270&X0=0.1&Y0=0.2
+     * http://oil.mengant.cn/api/v1/send/pending/test?imei=865820031289270&X0=0.1&Y0=0.2
      *
      * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiParam (请求参数说明) {float} X0  X维度的初始值
