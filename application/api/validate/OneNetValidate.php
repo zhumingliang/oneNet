@@ -28,7 +28,7 @@ class OneNetValidate extends BaseValidate
     ];
 
     protected $scene = [
-        'send' => ['imei', 'X0', 'Y0', 'X1', 'Y1', 'T1', 'T2'],
+        'send' => ['imei', 'X0', 'Y0'],
         'list' => ['imei', 'startTime', 'endTime', 'page', 'size'],
         'recent' => ['imei']
     ];

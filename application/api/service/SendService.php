@@ -9,14 +9,27 @@
 namespace app\api\service;
 
 
+use app\api\model\InitT;
 use app\api\model\LogT;
+use app\api\model\PendingSendT;
+use app\api\model\SendResT;
+use app\lib\enum\CommonEnum;
+use app\lib\exception\OneNetException;
 use app\lib\exception\ParameterException;
+use think\Db;
+use think\Model;
 
 class SendService
 {
     private $obj_id = '';
     private $obj_inst_id = '';
     private $res_id = '';
+    private $X0 = 0;
+    private $Y0 = 0;
+    private $X1 = 0;
+    private $Y1 = 0;
+    private $T1 = 0;
+    private $T2 = 0;
 
 
     public function __construct()
@@ -24,66 +37,135 @@ class SendService
         $this->obj_id = config('onenet.obj_id');
         $this->obj_inst_id = config('onenet.obj_inst_id');
         $this->res_id = config('onenet.res_id');
-    }
-
-
-    public function saveSendToCache($params)
-    {
-
-
+        $init = $this->getInit();
+        $this->X0 = $init['X0'];
+        $this->Y0 = $init['Y0'];
+        $this->X1 = $init['X1'];
+        $this->Y1 = $init['Y1'];
+        $this->T1 = $init['T1'];
+        $this->T2 = $init['T2'];
     }
 
     /**
-     *向传感器发送数据
-     * @param $params
-     * @return mixed
-     * @throws ParameterException
+     * 向传感器发送数据
+     * @param $imei
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
-    public function sendToOneNet($params)
+    public function sendToOneNet($imei)
     {
         try {
-            //$params = self::checkParams($params);
-            $sendParams = self::preParams($params['imei'], $params['X0'], $params['Y0'], $params['X1'], $params['Y1'],
-                $params['T1'], $params['T2']);
-
+            /**
+             * 检测imei是否有待处理请求
+             */
+            $pending_id = $this->setSendParams($imei);
+            if (!$pending_id) {
+                return false;
+            }
+            /**
+             * 发送待处理请求
+             */
+            $sendParams = self::preParams($imei, $this->X0, $this->Y0, $this->X1, $this->Y1,
+                $this->T1, $this->T2);
             $output = post($sendParams['url'], $sendParams['header'], $sendParams['content']);
-            LogT::create(['msg' => $output]);
             $output_array = json_decode($output, true);
-            return $output_array;
+            //保存发送结果
+            $this->saveSendRes($pending_id, $output);
+            //判断发送结果-成功则修改记录状态
+            if (isset($output_array['errno']) && !$output_array['errno']) {
+                PendingSendT::update(['state', CommonEnum::SUCCESS], ['id', $pending_id]);
+            }
+            return true;
         } catch (Exception $e) {
-
             LogT::create(['msg' => $e->getMessage()]);
         }
     }
 
+
     /**
-     * 检测ds_id 是否合法
-     * @param $params
-     * @return array
-     * @throws ParameterException
+     * 检测指定imei是否有待处理发送请求
+     * 有，则配置发送数据
+     * @param $imei
+     * @return bool|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
-    private static function checkParams($params)
+    private function setSendParams($imei)
     {
-        $ds_id = $params['ds_id'];
-        $ds_arr = explode('_', $ds_id);
-        if (!count($ds_arr)) {
-            throw  new ParameterException();
+        $order = PendingSendT::where('imei', $imei)
+            ->order('create_time desc')
+            ->find();
+        if ($order) {
+            $this->X0 = $order['X0'];
+            $this->Y0 = $order['Y0'];
+            $this->X1 = $order['X1'];
+            $this->Y1 = $order['Y1'];
+            $this->T1 = $order['T1'];
+            $this->T2 = $order['T2'];
+            return $order->id;
+        }
+        return false;
+
+
+    }
+
+    /**
+     * 保存待发送请求
+     * @param $imei
+     * @param $X0
+     * @param $Y0
+     * @throws OneNetException
+     */
+    public function savePendingRecord($imei, $X0, $Y0)
+    {
+        if ($X0) {
+            $this->X0 = $X0;
+        }
+        if ($Y0) {
+            $this->Y0 = $Y0;
         }
 
-        $params['obj_id'] = $ds_arr[0];
-        $params['obj_inst_id'] = $ds_arr[1];
-        $params['res_id'] = $ds_arr[2];
-        return $params;
-
+        $data = [
+            'imei' => $imei,
+            'X0' => $X0,
+            'Y0' => $Y0,
+            'X1' => $this->X1,
+            'Y1' => $this->Y1,
+            'T1' => $this->T1,
+            'T2' => $this->T2,
+            'state' => CommonEnum::FAIL,
+        ];
+        $send = PendingSendT::create($data);
+        if (!$send->id) {
+            throw  new OneNetException(
+                [
+                    'code' => 401,
+                    'msg' => '保存发送指令失败',
+                    'errorCode' => 10002
+                ]
+            );
+        }
     }
 
 
     /**
+     * 获取初始值：X1/Y1/T1/T2
+     * @return array|null|\PDOStatement|string|\think\Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    private function getInit()
+    {
+        return InitT::find();
+    }
+
+    /**
      * 准备数据
      * @param $imei
-     * @param $obj_id
-     * @param $obj_inst_id
-     * @param $res_id
      * @param $X0
      * @param $Y0
      * @param $X1
@@ -123,6 +205,24 @@ class SendService
             'content' => $content,
 
         ];
+    }
+
+
+    /**
+     * 保存发送结果
+     * @param $send_id
+     * @param $res
+     * @return SendResT
+     */
+    private function saveSendRes($send_id, $res)
+    {
+        $data = [
+            'send_id' => $send_id,
+            'res' => $res
+
+        ];
+        $res = SendResT::create($data);
+        return $res;
     }
 
 

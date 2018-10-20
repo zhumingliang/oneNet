@@ -112,89 +112,56 @@ class Index extends BaseController
 
 
     /**
-     * @api {GET} /api/v1/receive/send_old  向设备发送指令(旧版本)
+     * @api {GET} /api/v1/send/pending/test 缓存发送信息-测试接口
      * @apiGroup  API
      * @apiVersion 1.0.1
-     * @apiDescription 根据设备IMEI号，获取最近一条设备数据
+     * @apiDescription 测试接口：将发送信息缓存，等待设备下一次启动时发送
      * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/send/old?X=0.1&Y=0.2&threshold=5&interval=180
+     * http://oil.mengant.cn/api/v1/receive/send?imei=865820031289270&X0=0.1&Y0=0.2
      *
-     * @apiParam (请求参数说明) {String} equipmentId  设备IMEI号
-     * @apiParam (请求参数说明) {float} X  X倾角
-     * @apiParam (请求参数说明) {float} Y  Y倾角
-     * @apiParam (请求参数说明) {int} threshold  警告阀值
-     * @apiParam (请求参数说明) {int} interval  测量间隔 单位S
-     *
-     * @apiSuccessExample {json} 返回样例:
-     *{"msg":"ok","errorCode":0}
-     * @apiSuccess (返回参数说明) {int} error_code 错误码： 0表示操作成功无错误
-     * @apiSuccess (返回参数说明) {String} msg 信息描述
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
+     * @apiParam (请求参数说明) {float} X0  X维度的初始值
+     * @apiParam (请求参数说明) {float} Y0  Y维度的初始值
+     * @param $imei
+     * @param int $X0
+     * @param int $Y0
+     * @return \think\response\Json
      * @throws OneNetException
-     * @throws \app\lib\exception\ParameterException
      */
-    public function send_old()
+    public function savePendingTest($imei, $X0 = 0, $Y0 = 0)
     {
-        // (new  OneNetValidate())->scene('send')->goCheck();
-        $param = $this->request->param();
-
-        $init = InitT::getInit();
-        $params = [
-            'imei' => $init['imei'],
-            'obj_id' => $init['obj_id'],
-            'obj_inst_id' => $init['obj_inst_id'],
-            'res_id' => $init['res_id'],
-            'X' => $param['X'],
-            'Y' => $param['Y'],
-            'threshold' => $param['threshold'],
-            'interval' => $param['interval'],
-
-        ];
-        $res = ReceiveService::sendToOneNet($params);
-        if ($res['errno'] != 0) {
-            throw  new OneNetException(['code' => 401,
-                'msg' => '发送数据失败，失败原因：' . $res['error'],
-                'errorCode' => 10002]);
-
-        }
+        (new SendService())->savePendingRecord($imei, $X0, $Y0);
         return json(new SuccessMessage());
     }
 
-
     /**
-     * @api {GET} /api/v2/receive/send  向设备发送指令
+     * @api {POST} /api/v1/send/pending 缓存发送信息
      * @apiGroup  API
      * @apiVersion 1.0.1
-     * @apiDescription 根据设备IMEI号，获取最近一条设备数据
-     * @apiExample {get}  请求样例:
-     * http://oil.mengant.cn/api/v1/receive/send?ds_id=3300_0_5700&imei=865820031289270&X0=0.1&Y0=0.2&X1=0.1&Y1=0.2&T1=5&T2=180
-     *
-     * @apiParam (请求参数说明) {String} ds_id  设备参数组：obj_id/obj_inst_id/res_id 三个参数用"_"连接
+     * @apiDescription 测试接口：将发送信息缓存，等待设备下一次启动时发送
+     * @apiExample {post}  请求样例:
+     *    {
+     *       "imei": 1,
+     *       "X0": 1.1,
+     *       "Y0": 2.22,
+     *     }
      * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiParam (请求参数说明) {float} X0  X维度的初始值
-     * @apiParam (请求参数说明) {float} X1  X维度告警阈值
      * @apiParam (请求参数说明) {float} Y0  Y维度的初始值
-     * @apiParam (请求参数说明) {float} Y1  Y维度告警阈值
-     * @apiParam (请求参数说明) {int} T1  固定上传数据的间隔（小时）
-     * @apiParam (请求参数说明) {int} T2  内部读取数据的间隔（秒）
-     *
      * @apiSuccessExample {json} 返回样例:
      *{"msg":"ok","errorCode":0}
      * @apiSuccess (返回参数说明) {int} error_code 错误码： 0表示操作成功无错误
      * @apiSuccess (返回参数说明) {String} msg 信息描述
+     *
+     * @param $imei
+     * @param int $X0
+     * @param int $Y0
+     * @return \think\response\Json
      * @throws OneNetException
-     * @throws \app\lib\exception\ParameterException
      */
-    public function send()
+    public function savePending($imei, $X0 = 0, $Y0 = 0)
     {
-        (new  OneNetValidate())->scene('send')->goCheck();
-        $param = $this->request->param();
-        $res = (new SendService())->sendToOneNet($param);
-        if ($res['errno'] != 0) {
-            throw  new OneNetException(['code' => 401,
-                'msg' => '发送数据失败，失败原因：' . $res['error'],
-                'errorCode' => 10002]);
-
-        }
+        (new SendService())->savePendingRecord($imei, $X0, $Y0);
         return json(new SuccessMessage());
     }
 
