@@ -24,7 +24,7 @@ class ReceiveService
     {
         try {
             $ino = ReceiveT::create($msg_arr);
-            if ($ino == "IDLE") {
+            if ($ino->value == "IDLE") {
                 //此时代表设备正处于可接受下发数据状态
                 $imei = $ino->imei;
                 (new SendService())->sendToOneNet($imei);

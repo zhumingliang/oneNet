@@ -15,10 +15,6 @@ use app\api\model\PendingSendT;
 use app\api\model\SendResT;
 use app\lib\enum\CommonEnum;
 use app\lib\exception\OneNetException;
-use app\lib\exception\ParameterException;
-use think\Db;
-use think\Model;
-
 class SendService
 {
     private $obj_id = '';
