@@ -15,4 +15,6 @@ class CommonEnum
 
     const FAIL = 2;
 
+    const DELETE = 3;
+
 }

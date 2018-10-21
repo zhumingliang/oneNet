@@ -54,6 +54,27 @@ class ReceiveT extends Model
     }
 
 
+    public static function getCurrentX($imei)
+    {
+        $x = self::where('imei', $imei)
+            ->where('ds_id', '3300_0_5700')
+            ->field('value')
+            ->order('id desc')
+            ->find();
+        return $x;
+
+    }
+
+    public static function getCurrentY($imei)
+    {
+        $y = self::where('imei', $imei)
+            ->where('ds_id', '3300_0_5601')
+            ->field('value')
+            ->order('id desc')
+            ->find();
+        return $y;
+
+    }
 
 
 }

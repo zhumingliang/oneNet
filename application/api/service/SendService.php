@@ -15,6 +15,7 @@ use app\api\model\PendingSendT;
 use app\api\model\SendResT;
 use app\lib\enum\CommonEnum;
 use app\lib\exception\OneNetException;
+
 class SendService
 {
     private $obj_id = '';
@@ -33,7 +34,7 @@ class SendService
         $this->obj_id = config('onenet.obj_id');
         $this->obj_inst_id = config('onenet.obj_inst_id');
         $this->res_id = config('onenet.res_id');
-        $this->timeout=config('onenet.timeout');
+        $this->timeout = config('onenet.timeout');
         $init = $this->getInit();
         $this->X0 = $init['X0'];
         $this->Y0 = $init['Y0'];
@@ -116,13 +117,19 @@ class SendService
      * @param $Y0
      * @throws OneNetException
      */
-    public function savePendingRecord($imei, $X0, $Y0)
+    public function savePendingRecord($imei, $X0, $Y0, $X1, $Y1)
     {
         if ($X0) {
             $this->X0 = $X0;
         }
         if ($Y0) {
             $this->Y0 = $Y0;
+        }
+        if ($X1) {
+            $this->X1 = $X1;
+        }
+        if ($Y1) {
+            $this->Y1 = $Y1;
         }
 
         $data = [
@@ -145,6 +152,8 @@ class SendService
                 ]
             );
         }
+
+        return $send->id;
     }
 
 
