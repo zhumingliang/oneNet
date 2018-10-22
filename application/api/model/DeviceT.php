@@ -16,7 +16,7 @@ class DeviceT extends Model
 {
     public function getList($admin_id, $page, $size)
     {
-        return self::where('state', CommonEnum::DELETE)
+        return self::where('state', CommonEnum::SUCCESS)
             ->where('admin_id', $admin_id)
             ->hidden(['create_time', 'update_time', 'admin_id'])
             ->paginate($size, false, ['page' => $page]);

@@ -21,12 +21,15 @@ class DeviceValidate extends BaseValidate
         'page' => 'isPositiveInteger',
         'size' => 'isPositiveInteger',
         'id' => 'isPositiveInteger',
+        'title' => 'require',
+        'imsi' => 'require'
 
     ];
 
     protected $scene = [
         'init' => ['X0', 'Y0', 'X1', 'Y1', 'imei'],
         'imei' => ['imei'],
-        'id'=>['id']
+        'id' => ['id'],
+        'save'=>['imei','imsi','title']
     ];
 }

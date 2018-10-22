@@ -24,6 +24,11 @@ class DeviceService
             'y' => $y ? $y['value'] : 0
         ];
 
+    }
+
+    public function addDevice($params)
+    {
+        
 
     }
 }

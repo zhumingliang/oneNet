@@ -13,6 +13,8 @@ use think\Model;
 
 class ReceiveT extends Model
 {
+
+
     /**
      * 根据时间选择器获取列表
      * @param $imei
@@ -31,7 +33,7 @@ class ReceiveT extends Model
             ->whereBetweenTime('create_time', $time_begin, $time_end)
             ->hidden(['update_time'])
             ->order('create_time desc')
-            ->paginate($size, false, ['page' => $page]);
+            ->paginate($size, false, ['page' => $page])->toArray();
         return $pagingData;
 
     }

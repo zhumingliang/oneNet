@@ -15,6 +15,7 @@ use app\lib\exception\SuccessMessage;
 
 class Index extends BaseController
 {
+
     /**
      * 处理oneNet推送消息
      * @throws \Exception
@@ -57,8 +58,7 @@ class Index extends BaseController
      * @apiParam (请求参数说明) {String} page   当前页数
      * @apiParam (请求参数说明) {String} size   每页条数
      * @apiSuccessExample {json} 返回样例:
-     * {"total":784,"per_page":"2","current_page":1,"last_page":392,"data":[{"id":920,"at":"1537991802230","imei":"865820031313187","type":1,"ds_id":"3316_0_5700","value":"4.82","dev_id":"44631936","create_time":"2018-09-27 03:56:42"},{"id":919,"at":"1537991759033","imei":"865820031313187","type":1,"ds_id":"3300_0_5750","value":"0.1A0.2A5A180A","dev_id":"44631936","create_time":"2018-09-27 03:55:59"}]}
-     * @apiSuccess (返回参数说明) {int} total 数据总数
+     * {"total":182,"per_page":"2","current_page":1,"last_page":91,"data":[{"id":3135,"at":"1539958211907","imei":"865820035119960","type":1,"ds_id":"3303_0_5701","value":"IDLE","dev_id":"47254924","create_time":"2018-10-19 22:10:12","value_name":"模块状态"},{"id":3134,"at":"1539958191456","imei":"865820035119960","type":1,"ds_id":"3303_0_5701","value":"IDLE","dev_id":"47254924","create_time":"2018-10-19 22:09:51","value_name":"模块状态"}]}     * @apiSuccess (返回参数说明) {int} total 数据总数
      * @apiSuccess (返回参数说明) {int} per_page 每页多少条数据
      * @apiSuccess (返回参数说明) {int} current_page 当前页码
      * @apiSuccess (返回参数说明) {int} last_page 最后页码
@@ -71,6 +71,7 @@ class Index extends BaseController
      * @apiSuccess (返回参数说明) {String} value 具体数据部分，为设备上传至平台
      * @apiSuccess (返回参数说明) {String} dev_id onenet平台设备ID
      * @apiSuccess (返回参数说明) {String} create_time 接受数据时间
+     * @apiSuccess (返回参数说明) {String} value_name value对应描述
      *
      * @param $imei
      * @param $startTime
@@ -117,7 +118,7 @@ class Index extends BaseController
      */
     public function savePendingTest($imei, $X0 = 0, $Y0 = 0)
     {
-        (new SendService())->savePendingRecord($imei, $X0, $Y0,0,0);
+        (new SendService())->savePendingRecord($imei, $X0, $Y0, 0, 0);
         return json(new SuccessMessage());
     }
 

@@ -13,12 +13,32 @@ use app\api\controller\BaseController;
 use app\api\model\DeviceT;
 use app\api\model\PendingSendT;
 use app\api\service\DeviceService;
+use app\api\service\OneNet;
 use app\api\service\SendService;
 use app\api\validate\DeviceValidate;
+use app\lib\exception\SuccessMessage;
 
 class Device extends BaseController
 {
-    public function save()
+    /**
+     * 添加设备
+     */
+    public function addDevice()
+    {
+        (new DeviceValidate())->scene('save')->goCheck();
+        $params = $this->request->param();
+        (new OneNet())->addDevice($params);
+        return json(new SuccessMessage());
+
+
+    }
+
+    public function updateDevice()
+    {
+
+    }
+
+    public function deleteDevice()
     {
 
     }
@@ -27,8 +47,8 @@ class Device extends BaseController
      * @api {GET} /api/v1/devices 获取设备列表
      * @apiGroup  API
      * @apiVersion 1.0.1
-     * @apiDescription
-     * @apiExample {get}  请求样例:
+     * @apiDescription 获取设备列表
+     * @apiExample {get} 请求样例:
      * http://oil.mengant.cn/api/v1/devices?page=1&size=2
      * @apiParam (请求参数说明) {String} page   当前页数
      * @apiParam (请求参数说明) {String} size   每页条数

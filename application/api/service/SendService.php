@@ -81,7 +81,6 @@ class SendService
         }
     }
 
-
     /**
      * 检测指定imei是否有待处理发送请求
      * 有，则配置发送数据
@@ -115,6 +114,9 @@ class SendService
      * @param $imei
      * @param $X0
      * @param $Y0
+     * @param $X1
+     * @param $Y1
+     * @return mixed
      * @throws OneNetException
      */
     public function savePendingRecord($imei, $X0, $Y0, $X1, $Y1)
@@ -155,7 +157,6 @@ class SendService
 
         return $send->id;
     }
-
 
     /**
      * 获取初始值：X1/Y1/T1/T2
@@ -213,7 +214,6 @@ class SendService
         ];
     }
 
-
     /**
      * 保存发送结果
      * @param $send_id
@@ -230,6 +230,7 @@ class SendService
         $res = SendResT::create($data);
         return $res;
     }
+
 
 
 }

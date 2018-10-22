@@ -50,9 +50,38 @@ class ReceiveService
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
         $list = ReceiveT::getList($imei, $startTime, $endTime, $page, $size);
+        $list['data'] = self::prefixList($list['data']);
         return $list;
 
     }
 
+    private static function prefixList($list)
+    {
+        foreach ($list as $k => $v) {
+            $list[$k]['value_name'] = self::getValueNameAttr($v['ds_id']);
+        }
+
+        return $list;
+    }
+
+    private static function getValueNameAttr($ds_id)
+    {
+        $status = [
+            '3303_0_5700' => '传感器温度',
+            '3303_0_5601' => 'CPU温度',
+            '3303_0_5701' => '模块状态',
+            '3300_0_5700' => 'X值',
+            '3300_0_5601' => 'Y值',
+            '3300_0_5750' => '传递参数',
+            '3316_0_5700' => '电池供电电压',
+            '3316_0_5701' => '模块信号',
+        ];
+        if (key_exists($ds_id, $status)) {
+            return $status[$ds_id];
+        }
+        return '未知';
+
+
+    }
 
 }
