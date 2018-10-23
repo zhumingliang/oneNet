@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 
+use app\api\model\DataV;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
 use think\Exception;
@@ -23,6 +24,8 @@ class ReceiveService
     public static function save($msg_arr)
     {
         try {
+            $order_id = 1;
+            $msg_arr['order_id'] = $order_id;
             $ino = ReceiveT::create($msg_arr);
             if ($ino->value == "IDLE") {
                 //此时代表设备正处于可接受下发数据状态
@@ -37,6 +40,7 @@ class ReceiveService
 
     }
 
+
     /**
      * 获取指定设备信息
      * @param $imei
@@ -49,9 +53,71 @@ class ReceiveService
      */
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
-        $list = ReceiveT::getList($imei, $startTime, $endTime, $page, $size);
-        $list['data'] = self::prefixList($list['data']);
+        /* $list = ReceiveT::getList($imei, $startTime, $endTime, $page, $size);
+         $list['data'] = self::prefixList($list['data']);
+         return $list;*/
+
+        $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
+        $data = $list['data'];
+        if (count($data)) {
+            $value_list = self::getValueData($data);
+            $data = self::prefixListValue($data, $value_list);
+            $list['data'] = $data;
+        }
         return $list;
+
+
+    }
+
+
+    /**
+     * @param $data
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    private static function getValueData($data)
+    {
+        $id_arr = array();
+        foreach ($data as $k => $v) {
+            $id = $v['id'];
+            for ($i = 1; $i < 5; $i++) {
+                array_push($id_arr, $id + $i);
+            }
+
+        }
+        $id_arr_in = implode(',', $id_arr);
+        $data_list = ReceiveT::whereIn('id', $id_arr_in)->field('id,ds_id,value')
+            ->order('id')
+            ->select()->toArray();
+        return $data_list;
+
+    }
+
+
+    private static function prefixListValue($list, $list_value)
+    {
+        foreach ($list as $k => $v) {
+            $id = $v['id'];
+            $arr = array();
+            foreach ($list_value as $k2 => $v2) {
+                if ($v2['id'] > $id && $v2['id'] < $id + 5) {
+                    array_push(
+                        $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
+                        'value' => $v2['value']
+                    ]);
+
+                }
+
+            }
+
+            $list[$k]['param'] = $arr;
+
+        }
+
+        return $list;
+
 
     }
 
