@@ -101,10 +101,9 @@ class SendService
     private function setSendParams($imei)
     {
         $order = PendingSendT::where('imei', $imei)
-            ->where('state', '=', CommonEnum::FAIL)
             ->order('create_time desc')
             ->find();
-        if ($order) {
+        if ($order && $order['state'] == CommonEnum::FAIL) {
             $this->X0 = $order['X0'];
             $this->Y0 = $order['Y0'];
             $this->X1 = $order['X1'];
