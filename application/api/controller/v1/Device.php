@@ -141,7 +141,7 @@ class Device extends BaseController
      * @apiDescription 根据设备IMEI号，获取最近一条设备数据
      * @apiExample {get}  请求样例:
      * http://oil.mengant.cn/api/v1/device/init/res?id=1
-     * @apiParam (请求参数说明) {String} imei  初始化订单id
+     * @apiParam (请求参数说明) {String} id  初始化订单id
      * @apiSuccessExample {json} 返回样例:
      * {"state":2}
      * @apiSuccess (返回参数说明) {int} state 初始化结果：1 | 成功；2 | 待处理; 3 | 失败
