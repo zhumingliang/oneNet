@@ -108,7 +108,7 @@ class SendService
             $this->Y1 = $order['Y1'];
             $this->T1 = $order['T1'];
             $this->T2 = $order['T2'];
-            return $order->id;
+            return $order['id'];
         }
         return false;
 
