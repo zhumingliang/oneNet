@@ -194,7 +194,8 @@ class SendService
         $X1 = sprintf("%.2f", $X1) * 100;
         $Y1 = sprintf("%.2f", $Y1) * 100;
         $url = config('onenet.send_url');
-        $url = sprintf($url, $imei, $this->obj_id, $this->obj_inst_id);
+        $time_out = config('onenet.time_out');
+        $url = sprintf($url, $imei, $this->obj_id, $this->obj_inst_id, $time_out);
         $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
         $header[] = "Content-Type: application/json";
         $header[] = "Host: api.heclouds.com";
