@@ -63,7 +63,7 @@ class SendService
                 return false;
             }
 
-            LogT::create(['msg' => 'sendId:'.$pending_id]);
+            LogT::create(['msg' => 'sendId:' . $pending_id]);
 
             /**
              * 发送待处理请求
@@ -79,7 +79,7 @@ class SendService
             $this->saveSendRes($pending_id, $output);
             //判断发送结果-成功则修改记录状态
             if (isset($output_array['errno']) && !$output_array['errno']) {
-                PendingSendT::update(['state', CommonEnum::SUCCESS], ['id', $pending_id]);
+                PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
             } else {
                 LogT::create(['msg' => $output_array['errno']]);
             }
