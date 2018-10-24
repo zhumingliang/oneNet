@@ -62,6 +62,9 @@ class SendService
             if (!$pending_id) {
                 return false;
             }
+
+            LogT::create(['msg' => 'sendId:'.$pending_id]);
+
             /**
              * 发送待处理请求
              */
