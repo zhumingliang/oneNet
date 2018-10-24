@@ -20,15 +20,15 @@ class DeviceService
         $y = ReceiveT::getCurrentY($imei);
 
         return [
-            'x' => $x ? $x['value'] : 0,
-            'y' => $y ? $y['value'] : 0
+            'x' => $x ? $x['value'] / 100 : 0,
+            'y' => $y ? $y['value'] / 100 : 0
         ];
 
     }
 
     public function addDevice($params)
     {
-        
+
 
     }
 }

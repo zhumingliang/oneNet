@@ -28,7 +28,7 @@ class ReceiveService
             if ($ino->value == "IDLE") {
                 //此时代表设备正处于可接受下发数据状态
                 LogT::create(['msg' => '检测该设备是否有待处理初始化，IMEI：' . $ino->imei]);
-                $imei =$ino->imei;
+                $imei = $ino->imei;
                 (new SendService())->sendToOneNet($imei);
 
             }
@@ -104,7 +104,7 @@ class ReceiveService
                 if ($v2['id'] > $id && $v2['id'] < $id + 5) {
                     array_push(
                         $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
-                        'value' => $v2['value']
+                        'value' => self::prifixValue($v2['ds_id'], $v2['value'])
                     ]);
 
                 }
@@ -146,7 +146,15 @@ class ReceiveService
         }
         return '未知';
 
+    }
 
+    private static function prifixValue($ds_id, $value)
+    {
+        if ($ds_id == '3300_0_5700' || $ds_id == '3300_0_5601') {
+            return $value / 100;
+        }
+
+        return $value;
     }
 
 }
