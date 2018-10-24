@@ -81,7 +81,7 @@ class SendService
             if (isset($output_array['errno']) && !$output_array['errno']) {
                 PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
             } else {
-                LogT::create(['msg' => $output_array['errno']]);
+                LogT::create(['msg' => 'errno:'.$output_array['errno'].'error:'.$output_array['error']]);
             }
             return true;
         } catch (Exception $e) {
