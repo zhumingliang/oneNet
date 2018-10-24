@@ -67,6 +67,9 @@ class SendService
              */
             $sendParams = self::preParams($imei, $this->X0, $this->Y0, $this->X1, $this->Y1,
                 $this->T1, $this->T2);
+
+            LogT::create(['msg' => $sendParams['content']]);
+
             $output = post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             $output_array = json_decode($output, true);
             //保存发送结果
