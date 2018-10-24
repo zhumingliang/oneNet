@@ -25,10 +25,10 @@ class ReceiveService
     {
         try {
             $ino = ReceiveT::create($msg_arr);
-            if ($ino->value == "IDLE") {
+            if ($msg_arr['value'] == "IDLE") {
                 //此时代表设备正处于可接受下发数据状态
-                LogT::create(['msg' => '检测该设备是否有待处理初始化，IMEI：'.$ino->imei]);
-                $imei = $ino->imei;
+                LogT::create(['msg' => '检测该设备是否有待处理初始化，IMEI：' . $msg_arr['imei']]);
+                $imei = $msg_arr['imei'];
                 (new SendService())->sendToOneNet($imei);
 
             }
