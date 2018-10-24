@@ -132,5 +132,11 @@ class Index extends BaseController
         return json(new SuccessMessage());
     }
 
+    public function sendTest($imei)
+    {
+        (new SendService())->sendToOneNet($imei);
+
+    }
+
 
 }
