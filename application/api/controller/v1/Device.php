@@ -158,7 +158,7 @@ class Device extends BaseController
     }
 
     /**
-     * @api {GET} /api/v1/device/init/info 获取指定设备初始化记录
+     * @api {GET} /api/v1/device/init/info 根据设备IMEI号获取设备初始化数据
      * @apiGroup  API
      * @apiVersion 1.0.1
      * @apiDescription 根据设备IMEI号获取设备初始化数据
