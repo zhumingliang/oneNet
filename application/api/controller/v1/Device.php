@@ -157,5 +157,38 @@ class Device extends BaseController
         return json($state);
     }
 
+    /**
+     * @api {GET} /api/v1/device/init/info 获取指定设备初始化记录
+     * @apiGroup  API
+     * @apiVersion 1.0.1
+     * @apiDescription 根据设备IMEI号获取设备初始化数据
+     * @apiExample {get}  请求样例:
+     * http://oil.mengant.cn/api/v1/device/init/info?imei=865820035119960
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
+     * @apiSuccessExample {json} 返回样例:
+     * {"id":16,"imei":"865820035119960","X0":-437,"Y0":-12,"X1":20,"Y1":20,"T1":180,"T2":2,"create_time":"2018-10-24 18:20:30","update_time":"2018-10-24 23:44:57","state":1}
+     * @apiSuccess (返回参数说明) {int} id 记录id
+     * @apiSuccess (返回参数说明) {int} X0 X轴实时数据
+     * @apiSuccess (返回参数说明) {int} Y0 Y轴实时数据
+     * @apiSuccess (返回参数说明) {int} X1 X轴实时数据
+     * @apiSuccess (返回参数说明) {int} Y1 Y轴实时数据
+     * @apiSuccess (返回参数说明) {int} T1 Y轴实时数据
+     * @apiSuccess (返回参数说明) {int} T2 Y轴实时数据
+     * @apiSuccess (返回参数说明) {String} create_time 创建时间
+     * @apiSuccess (返回参数说明) {String} update_time 初始化时间
+     * @apiSuccess (返回参数说明) {int} state 初始化状态：1 | 成功；2 | 待处理
+     * @param $imei
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function getInit($imei)
+    {
+        $info = (new  DeviceService())->getInitInfo($imei);
+        return json($info);
+
+    }
+
 
 }

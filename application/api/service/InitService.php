@@ -9,9 +9,11 @@
 namespace app\api\service;
 
 
-use app\api\model\InitT;
+use app\api\model\PendingSendT;
 
 class InitService
 {
+
+
 
 }
