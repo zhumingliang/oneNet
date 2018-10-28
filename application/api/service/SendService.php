@@ -79,9 +79,11 @@ class SendService
             $this->saveSendRes($pending_id, $output);
             //判断发送结果-成功则修改记录状态
             if (isset($output_array['errno']) && !$output_array['errno']) {
-                PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
+                //PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
+                self::test($pending_id);
+
             } else {
-                LogT::create(['msg' => 'errno:'.$output_array['errno'].'error:'.$output_array['error']]);
+                LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
             }
             return true;
         } catch (Exception $e) {
@@ -238,6 +240,17 @@ class SendService
         ];
         $res = SendResT::create($data);
         return $res;
+    }
+
+    private function test($pending_id)
+    {
+        $pending = PendingSendT::where('id', $pending_id)->find();
+        if ($pending->T1 > 3) {
+            $pending->T1 = ['dec', 1];
+        } else {
+            $pending->T1 = 10;
+        }
+        $pending->save();
     }
 
 
