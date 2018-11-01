@@ -79,8 +79,8 @@ class SendService
             $this->saveSendRes($pending_id, $output);
             //判断发送结果-成功则修改记录状态
             if (isset($output_array['errno']) && !$output_array['errno']) {
-                //PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
-                self::test($pending_id);
+                PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
+               // self::test($pending_id);
 
             } else {
                 LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
