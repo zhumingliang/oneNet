@@ -207,7 +207,7 @@ class SendService
 
         $val = [$X0, $Y0, $X1, $Y1, $T1, $T2];
         $val = implode('A', $val);
-        //$val .= 'A';
+        $val .= 'AA';
         $content = new \stdClass();
         $param = new \stdClass();
         $param->res_id = $this->res_id;
