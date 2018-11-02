@@ -76,11 +76,11 @@ class SendService
             $output = post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             $output_array = json_decode($output, true);
             //保存发送结果
-            $this->saveSendRes($pending_id, $output);
+            $this->saveSendRes($pending_id, $output, $sendParams['content']);
             //判断发送结果-成功则修改记录状态
             if (isset($output_array['errno']) && !$output_array['errno']) {
                 PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
-               // self::test($pending_id);
+                // self::test($pending_id);
 
             } else {
                 LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
@@ -229,13 +229,15 @@ class SendService
      * 保存发送结果
      * @param $send_id
      * @param $res
+     * @param $sendParams
      * @return SendResT
      */
-    private function saveSendRes($send_id, $res)
+    private function saveSendRes($send_id, $res, $sendParams)
     {
         $data = [
             'send_id' => $send_id,
-            'res' => $res
+            'res' => $res,
+            'sendParams' => $sendParams
 
         ];
         $res = SendResT::create($data);
