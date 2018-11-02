@@ -91,6 +91,49 @@ class Index extends BaseController
 
 
     /**
+     * @api {GET} /api/v1/receive/export 导出数据EXCEL
+     * @apiGroup  API
+     * @apiVersion 1.0.1
+     * @apiDescription 根据设备IMEI号，开始时间和截止时间获取历史数据
+     * @apiExample {get}  请求样例:
+     * http://oil.mengant.cn/api/v1/receive/export?imei=865820031313187&startTime=2018-09-20&endTime=2018-10-01
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
+     * @apiParam (请求参数说明) {String} startTime   开始时间
+     * @apiParam (请求参数说明) {String} endTime  截止时间
+     *
+     * @param $imei
+     * @param $startTime
+     * @param $endTime
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function exportData($imei, $startTime, $endTime)
+    {
+
+        $endTime = addDay(1, $endTime);
+        $list = ReceiveT::where('imei', $imei)
+            ->whereBetweenTime('create_time', $startTime, $endTime)
+            ->field('id,at,imei,type,ds_id,value,dev_id,create_time')
+            ->order('create_time desc')
+            ->select()->toArray();
+
+          $header = array(
+              'id',
+              'at',
+              'imei',
+              'type',
+              'ds_id',
+              'value',
+              'dev_id',
+              'create_time'
+          );
+          $file_name = '数据导出' . '-' . date('Y-m-d', time()) . '.csv';
+          put_csv($list, $header, $file_name);
+    }
+
+
+    /**
      * @param $equipmentId
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException

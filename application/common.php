@@ -82,6 +82,55 @@ function delete($url, $header, $content)
 }
 
 
+/**
+ * 导出数据到CSV文件
+ * @param array $list 数据
+ * @param array $title 标题
+ * @param string $filename CSV文件名
+ */
+function put_csv($list, $title, $filename)
+{
+    $file_name = $filename;
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename=' . $file_name);
+    header('Cache-Control: max-age=0');
+    $file = fopen('php://output', "a");
+    $limit = 5000;
+    $calc = 0;
+    foreach ($title as $v) {
+        $tit[] = iconv('UTF-8', 'GB2312//IGNORE', $v);
+    }
+    fputcsv($file, $tit);
+    foreach ($list as $v) {
+
+        $calc++;
+        if ($limit == $calc) {
+            ob_flush();
+            flush();
+            $calc = 0;
+        }
+        foreach ($v as $t) {
+            $t = is_numeric($t) ? $t . "\t" : $t;
+            $tarr[] = iconv('UTF-8', 'GB2312//IGNORE', $t);
+        }
+        fputcsv($file, $tarr);
+        unset($tarr);
+    }
+    unset($list);
+    fclose($file);
+    exit();
+}
+
+
+function addDay($count, $time_old)
+{
+    $time_new = date('Y-m-d', strtotime('+' . $count . ' day',
+        strtotime($time_old)));
+    return $time_new;
+
+}
+
+
 
 
 
