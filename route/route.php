@@ -30,6 +30,7 @@ Route::get('api/:version/device/init/info', 'api/:version.Device/getInit');
 Route::get('api/:version/device/init/res', 'api/:version.Device/getInitRes');
 Route::get('api/:version/device/current', 'api/:version.Device/getCurrentValue');
 Route::get('api/:version/device/save', 'api/:version.Device/addDevice');
+Route::get('api/:version/device/delete', 'api/:version.Device/deleteDevice');
 
 
 

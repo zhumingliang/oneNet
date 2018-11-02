@@ -37,3 +37,51 @@ function post($url, $header, $content)
     curl_close($ch);
     return $response;
 }
+
+function get($url, $header, $content)
+{
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+    if (curl_exec($ch) === false) //curl_error()返回当前会话最后一次错误的字符串
+    {
+        die("Curlerror: " . curl_error($ch));
+    }
+    $response = curl_exec($ch);
+    //获取返回的文件流
+    curl_close($ch);
+    return $response;
+}
+
+
+function delete($url, $header, $content)
+{
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+
+    if (curl_exec($ch) === false) //curl_error()返回当前会话最后一次错误的字符串
+    {
+        die("Curlerror: " . curl_error($ch));
+    }
+    $response = curl_exec($ch);
+    //获取返回的文件流
+    curl_close($ch);
+    return $response;
+}
+
+
+
+
+

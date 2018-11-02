@@ -9,6 +9,9 @@
 namespace app\api\service;
 
 
+use app\api\model\DeviceT;
+use app\api\model\LogT;
+use app\lib\enum\CommonEnum;
 use app\lib\exception\OneNetException;
 use think\Exception;
 
@@ -27,21 +30,94 @@ class OneNet
     /**
      * 添加设备
      * @param $params
+     * @return mixed
      * @throws OneNetException
      */
     public function addDevice($params)
     {
 
-        try {
-            $add_device_url = config('onenet.add_device_url');
-            $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
-            $output_array = json_decode($output, true);
+        $add_device_url = config('onenet.add_device_url');
+        $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
+        $output_array = json_decode($output, true);
+        if (isset($output_array['errno']) && $output_array['errno']) {
 
-
-        } catch (Exception $e) {
+            LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
             throw new OneNetException([
-
+                'code' => 401,
+                'msg' => '创建设备到平台失败失败原因：' . $output_array['error'],
+                'errorCode' => 10008
             ]);
+
+        }
+        $device_id = $output_array['data']['device_id'];
+        //保存到数据库
+        $params['device_id'] = $device_id;
+        $params['admin_id'] = 1;
+        $params['state'] = CommonEnum::SUCCESS;
+
+        $device = DeviceT::create($params);
+        if (!$device->id) {
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '保存设备到数据库失败',
+                'errorCode' => 10009
+            ]);
+        }
+
+        return $device_id;
+
+
+    }
+
+    /**
+     * 删除设备
+     * @param $device_id
+     * @throws OneNetException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+
+    public function deleteDevice($device_id)
+    {
+        //检查设备是欧已经删除
+        $device = DeviceT::where('device_id', $device_id)->find();
+        if (!$device) {
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '删除设备不存在',
+                'errorCode' => 10010
+            ]);
+        }
+        if ($device['state'] == CommonEnum::FAIL) {
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '该设备已删除',
+                'errorCode' => 10011
+            ]);
+        }
+        $delete_device_url = config('onenet.delete_device_url');
+        $delete_device_url = sprintf($delete_device_url, $device_id);
+        $output = delete($delete_device_url, $this->header, '');
+        $output_array = json_decode($output, true);
+        if (isset($output_array['errno']) && !$output_array['errno']) {
+            LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '设备删除失败失败原因：' . $output_array['error'],
+                'errorCode' => 10012
+            ]);
+
+        }
+
+        $res = DeviceT::update(['state' => CommonEnum::FAIL], ['device_id' => $device_id])->find();
+        if ($res) {
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '设备删除状态修改失败',
+                'errorCode' => 10013
+            ]);
+
         }
 
     }
@@ -58,6 +134,7 @@ class OneNet
         $data['protocol'] = "LWM2M";
         $data['auth_info'] = [$params['imei'] => $params['imsi']];
         return json_encode($data);
+
 
     }
 

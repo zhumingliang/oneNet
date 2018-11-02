@@ -21,7 +21,26 @@ use app\lib\exception\SuccessMessage;
 class Device extends BaseController
 {
     /**
-     * 添加设备
+     * @api {POST} /api/v1/device/save 添加设备
+     * @apiGroup  API
+     * @apiVersion 1.0.1
+     * @apiDescription  将设备保存到平台
+     * @apiExample {post}  请求样例:
+     *    {
+     *       "imei": "865820035119960",
+     *       "imsi": "865820035129960",
+     *       "title": "设备1号"
+     *     }
+     * @apiParam (请求参数说明) {String} imei  设备IMEI号
+     * @apiParam (请求参数说明) {String} imsi  设备IMSI号
+     * @apiParam (请求参数说明) {String} title  设备名称
+     * @apiSuccessExample {json} 返回样例:
+     *{"device_id":"1231231"}
+     * @apiSuccess (返回参数说明) {String} device_id 设备在平台id
+     *
+     * @return \think\response\Json
+     * @throws \app\lib\exception\OneNetException
+     * @throws \app\lib\exception\ParameterException
      */
     public function addDevice()
     {
@@ -38,9 +57,36 @@ class Device extends BaseController
 
     }
 
-    public function deleteDevice()
+    /**
+     * @api {POST} /api/v1/device/delete 删除设备
+     * @apiGroup  API
+     * @apiVersion 1.0.1
+     * @apiDescription  将指定设备从平台删除
+     * @apiExample {post}  请求样例:
+     *    {
+     *       "device_id": "121"
+     *     }
+     * @apiParam (请求参数说明) {String} device_id  设备在平台ID
+     * @apiSuccessExample {json} 返回样例:
+     * {"msg": "ok","error_code": 0}
+     * @apiSuccess (返回参数说明) {int} error_code 错误代码 0 表示没有错误
+     * @apiSuccess (返回参数说明) {String} msg 操作结果描述
+     * @apiSuccess (返回参数说明) {int} id 初始化信息缓存id
+     *
+     * @param $device_id
+     * @return \think\response\Json
+     * @throws \app\lib\exception\OneNetException
+     * @throws \app\lib\exception\ParameterException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function deleteDevice($device_id)
     {
 
+        (new DeviceValidate())->scene('save')->goCheck();
+        (new OneNet())->deleteDevice($device_id);
+        return json(new SuccessMessage());
     }
 
     /**
