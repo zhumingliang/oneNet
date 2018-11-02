@@ -237,7 +237,7 @@ class SendService
         $data = [
             'send_id' => $send_id,
             'res' => $res,
-            'sendParams' => $sendParams
+            'params' => $sendParams
 
         ];
         $res = SendResT::create($data);
