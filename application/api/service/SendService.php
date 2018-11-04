@@ -79,7 +79,10 @@ class SendService
             $this->saveSendRes($pending_id, $output, $sendParams['content']);
             //判断发送结果-成功则修改记录状态
             if (isset($output_array['errno']) && !$output_array['errno']) {
-                PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
+                if ($imei != "865820035095749") {
+                    PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
+
+                }
                 // self::test($pending_id);
 
             } else {
