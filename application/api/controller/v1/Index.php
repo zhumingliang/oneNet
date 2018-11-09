@@ -12,6 +12,7 @@ use app\api\service\Util;
 use app\api\validate\OneNetValidate;
 use app\lib\exception\OneNetException;
 use app\lib\exception\SuccessMessage;
+use think\Db;
 
 class Index extends BaseController
 {
@@ -118,18 +119,18 @@ class Index extends BaseController
             ->order('create_time desc')
             ->select()->toArray();
 
-          $header = array(
-              'id',
-              'at',
-              'imei',
-              'type',
-              'ds_id',
-              'value',
-              'dev_id',
-              'create_time'
-          );
-          $file_name = '数据导出' . '-' . date('Y-m-d', time()) . '.csv';
-          put_csv($list, $header, $file_name);
+        $header = array(
+            'id',
+            'at',
+            'imei',
+            'type',
+            'ds_id',
+            'value',
+            'dev_id',
+            'create_time'
+        );
+        $file_name = '数据导出' . '-' . date('Y-m-d', time()) . '.csv';
+        put_csv($list, $header, $file_name);
     }
 
 
@@ -176,9 +177,51 @@ class Index extends BaseController
         return json(new SuccessMessage());
     }
 
-    public function sendTest($imei)
+    public function sendTest($count)
     {
-        (new SendService())->sendToOneNet($imei);
+       /* $begin = 7677;
+
+        // (new SendService())->sendToOneNet($imei);
+        $info = Db::connect([
+            // 数据库类型
+            'type' => 'mysql',
+            // 数据库连接DSN配置
+            'dsn' => '',
+            // 服务器地址
+            'hostname' => '55a32a9887e03.gz.cdb.myqcloud.com',
+            // 数据库名
+            'database' => 'onenet_bak',
+            // 数据库用户名
+            'username' => 'cdb_outerroot',
+            // 数据库密码
+            'password' => 'Libo1234',
+            // 数据库连接端口
+            'hostport' => '16273',
+            // 数据库连接参数
+            'params' => [],
+            // 数据库编码默认采用utf8
+            'charset' => 'utf8',
+            // 数据库表前缀
+            'prefix' => 'onenet_',
+        ])->table('onenet_receive_t')
+            ->where('id', ['>', $begin + ($count - 1) * 400], ['<', $begin + 400 * $count], 'and')
+            ->select();
+
+        echo $begin + ($count - 1) * 400;
+        echo '\n';
+        echo $begin + 400 * $count;
+
+        if (count($info)) {
+            foreach ($info as $k => $v) {
+                ReceiveT::create($v);
+            }
+        } else {
+            return json(['msg' => 'null']);
+        }*/
+
+        // return json(new SuccessMessage());
+        //print_r((new ReceiveT())->saveAll($info));
+
 
     }
 

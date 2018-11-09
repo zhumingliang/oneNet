@@ -25,6 +25,7 @@ class DeviceService
         $y = ReceiveT::getCurrentY($imei);
 
         return [
+            'create_time'=>$x['create_time'],
             'x' => $x ? $x['value'] / 100 : 0,
             'y' => $y ? $y['value'] / 100 : 0
         ];

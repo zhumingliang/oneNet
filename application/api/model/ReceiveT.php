@@ -60,7 +60,7 @@ class ReceiveT extends Model
     {
         $x = self::where('imei', $imei)
             ->where('ds_id', '3300_0_5700')
-            ->field('value')
+            ->field('value,create_time')
             ->order('id desc')
             ->find();
         return $x;

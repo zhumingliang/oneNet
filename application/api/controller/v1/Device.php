@@ -164,9 +164,10 @@ class Device extends BaseController
      * http://oil.mengant.cn/api/v1/device/current?imei=865820035119960
      * @apiParam (请求参数说明) {String} imei  设备IMEI号
      * @apiSuccessExample {json} 返回样例:
-     * {"x":"0","y":"-79"}
+     * {"x":"0","y":"-79","create_time":"2018-11-09 09:50 49"}
      * @apiSuccess (返回参数说明) {int} x X轴实时数据
      * @apiSuccess (返回参数说明) {int} y Y轴实时数据
+     * @apiSuccess (返回参数说明) {String} create_time 创建时间
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
      */
@@ -214,12 +215,12 @@ class Device extends BaseController
      * @apiSuccessExample {json} 返回样例:
      * {"id":16,"imei":"865820035119960","X0":-437,"Y0":-12,"X1":20,"Y1":20,"T1":180,"T2":2,"create_time":"2018-10-24 18:20:30","update_time":"2018-10-24 23:44:57","state":1}
      * @apiSuccess (返回参数说明) {int} id 记录id
-     * @apiSuccess (返回参数说明) {int} X0 X轴实时数据
-     * @apiSuccess (返回参数说明) {int} Y0 Y轴实时数据
-     * @apiSuccess (返回参数说明) {int} X1 X轴实时数据
-     * @apiSuccess (返回参数说明) {int} Y1 Y轴实时数据
-     * @apiSuccess (返回参数说明) {int} T1 Y轴实时数据
-     * @apiSuccess (返回参数说明) {int} T2 Y轴实时数据
+     * @apiSuccess (返回参数说明) {float} X0  X维度的初始值
+     * @apiSuccess (返回参数说明) {float} Y0  Y维度的初始值
+     * @apiSuccess (返回参数说明) {float} X1  X维度的报警阀值
+     * @apiSuccess (返回参数说明) {float} Y1  Y维度的报警阀值
+     * @apiSuccess (返回参数说明) {int} T1 每检测几次就上传数据
+     * @apiSuccess (返回参数说明) {int} T2 多长时间检测一次数据
      * @apiSuccess (返回参数说明) {String} create_time 创建时间
      * @apiSuccess (返回参数说明) {String} update_time 初始化时间
      * @apiSuccess (返回参数说明) {int} state 初始化状态：1 | 成功；2 | 待处理
