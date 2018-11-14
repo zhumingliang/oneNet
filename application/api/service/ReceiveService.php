@@ -100,12 +100,8 @@ class ReceiveService
         foreach ($list as $k => $v) {
             $id = $v['id'];
             $arr = array();
+
             foreach ($list_value as $k2 => $v2) {
-
-                if ($v2['ds_id'] != '3300_0_5700') {
-                    break;
-
-                }
                 if ($v2['id'] > $id && $v2['id'] < $id + 5) {
                     array_push(
                         $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
