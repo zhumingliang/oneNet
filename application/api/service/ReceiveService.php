@@ -104,7 +104,7 @@ class ReceiveService
                 if ($v2['id'] > $id && $v2['id'] < $id + 5) {
 
                     if ($v2['ds_id'] != '3300_0_5700') {
-                        continue;
+                        break;
 
                     }
                     array_push(
