@@ -54,7 +54,7 @@ class ReceiveService
     {
         $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
-        $value_list = self::getValueData($data,$imei);
+        $value_list = self::getValueData($data, $imei);
 
         foreach ($data as $k => $v) {
 
@@ -82,7 +82,7 @@ class ReceiveService
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    private static function getValueData($data,$imei)
+    private static function getValueData($data, $imei)
     {
         $id_arr = array();
         foreach ($data as $k => $v) {
@@ -94,7 +94,7 @@ class ReceiveService
         }
         $id_arr_in = implode(',', $id_arr);
         $data_list = ReceiveT::whereIn('id', $id_arr_in)->field('id,ds_id,value,imei')
-            ->where('imei',$imei)
+            ->where('imei', $imei)
             ->order('id')
             ->select()->toArray();
 
@@ -127,7 +127,7 @@ class ReceiveService
 
         }
 
-        $res = count($arr) ? true : false;
+        $res = count($arr) >= 2 ? true : false;
         return [
             'res' => $res,
             'param' => $arr
