@@ -52,72 +52,31 @@ class ReceiveService
      */
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
-        /* $list = ReceiveT::getList($imei, $startTime, $endTime, $page, $size);
-         $list['data'] = self::prefixList($list['data']);
-         return $list;*/
-
         $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
-        foreach ($data as $k => $v) {
-            $id = $v['id'];
-            $param = self::getParamObj($id);
+        $value_list = self::getValueData($data);
 
+        foreach ($data as $k => $v) {
+
+            $param = self::getParams($v['id'], $value_list);
             if (!$param['res']) {
                 unset($data[$k]);
-            }else{
+            } else {
                 $data[$k]['param'] = $param['param'];
 
             }
-
-
         }
         $list['data'] = $data;
         return $list;
 
-        /*  if (count($data)) {
-              $value_list = self::getValueData($data);
-              $data = self::prefixListValue($data, $value_list);
-              $list['data'] = $data;
-          }
-          return $list;*/
 
 
     }
 
 
-    private static function getParamObj($id)
-    {
-        $obj = ReceiveT::where('id', '>', $id)
-            ->field('ds_id,value')
-            ->order('create_time')
-            ->limit(0, 6)->select()->toArray();
-
-        $arr = array();
-        if (count($obj)) {
-            foreach ($obj as $k => $v) {
-                if ($obj[0]['ds_id'] != '3300_0_5700') {
-                    break;
-
-                }
-                array_push(
-                    $arr, ['value_name' => self::getValueNameAttr($v['ds_id']),
-                    'value' => self::prifixValue($v['ds_id'], $v['value'])
-                ]);
-
-            }
-        }
-
-        $res=count($arr)?true:false;
-
-        return [
-            'res' => $res,
-            'param' => $arr
-        ];
-
-
-    }
 
     /**
+     * 获取所有待处理数据
      * @param $data
      * @return array
      * @throws \think\db\exception\DataNotFoundException
@@ -139,64 +98,40 @@ class ReceiveService
             ->order('id')
             ->select()->toArray();
 
-        echo $id_arr_in;
         return $data_list;
 
     }
 
 
-    private static function prefixListValue($list, $list_value)
-    {
-        foreach ($list as $k => $v) {
-            $id = $v['id'];
-            $param_obj = self::getParams($id, $list_value);
-            if ($param_obj['res']) {
-                $list[$k]['param'] = $param_obj['param'];
-
-            } else {
-                unset($list[$k]);
-            }
-
-
-        }
-
-        return $list;
-
-
-    }
-
     private static function getParams($id, $list_value)
     {
 
         $arr = array();
-
+        $begin = 0;
         foreach ($list_value as $k2 => $v2) {
             if ($v2['id'] > $id && $v2['id'] < $id + 5) {
-
-                if ($v2['id'] = $id + 1) {
+                if ($begin == 0) {
                     if ($v2['ds_id'] != "3300_0_5700") {
-
-                        return [
-                            'res' => false,
-                            'param' => $arr
-                        ];
-
+                        break;
                     }
 
                 }
+
                 array_push(
                     $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
                     'value' => self::prifixValue($v2['ds_id'], $v2['value'])
                 ]);
-
+                $begin = 1;
             }
-            return [
-                'res' => true,
-                'param' => $arr
-            ];
+
 
         }
 
+        $res = count($arr) ? true : false;
+        return [
+            'res' => $res,
+            'param' => $arr
+        ];
 
     }
 
