@@ -58,16 +58,64 @@ class ReceiveService
 
         $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
-        if (count($data)) {
-            $value_list = self::getValueData($data);
-            $data = self::prefixListValue($data, $value_list);
-            $list['data'] = $data;
+        foreach ($data as $k => $v) {
+            $id = $v['id'];
+            $param = self::getParamObj($id);
+
+            if (!$param['res']) {
+                unset($data[$k]);
+            }else{
+                $data[$k]['params'] = $param['param'];
+
+            }
+
+
         }
+        $list['data'] = $data;
         return $list;
+
+        /*  if (count($data)) {
+              $value_list = self::getValueData($data);
+              $data = self::prefixListValue($data, $value_list);
+              $list['data'] = $data;
+          }
+          return $list;*/
 
 
     }
 
+
+    private static function getParamObj($id)
+    {
+        $obj = ReceiveT::where('id', '>', $id)
+            ->field('ds_id,value')
+            ->order('create_time')
+            ->limit(0, 6)->select()->toArray();
+
+        $arr = array();
+        if (count($obj)) {
+            foreach ($obj as $k => $v) {
+                if ($obj[0]['ds_id'] != '3300_0_5700') {
+                    break;
+
+                }
+                array_push(
+                    $arr, ['value_name' => self::getValueNameAttr($v['ds_id']),
+                    'value' => self::prifixValue($v['ds_id'], $v['value'])
+                ]);
+
+            }
+        }
+
+        $res=count($arr)?true:false;
+
+        return [
+            'res' => $res,
+            'param' => $arr
+        ];
+
+
+    }
 
     /**
      * @param $data
@@ -90,6 +138,8 @@ class ReceiveService
         $data_list = ReceiveT::whereIn('id', $id_arr_in)->field('id,ds_id,value,imei')
             ->order('id')
             ->select()->toArray();
+
+        echo $id_arr_in;
         return $data_list;
 
     }
@@ -99,24 +149,53 @@ class ReceiveService
     {
         foreach ($list as $k => $v) {
             $id = $v['id'];
-            $arr = array();
+            $param_obj = self::getParams($id, $list_value);
+            if ($param_obj['res']) {
+                $list[$k]['param'] = $param_obj['param'];
 
-            foreach ($list_value as $k2 => $v2) {
-                if ($v2['id'] > $id && $v2['id'] < $id + 5) {
-                    array_push(
-                        $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
-                        'value' => self::prifixValue($v2['ds_id'], $v2['value'])
-                    ]);
-
-                }
-
+            } else {
+                unset($list[$k]);
             }
 
-            $list[$k]['param'] = $arr;
 
         }
 
         return $list;
+
+
+    }
+
+    private static function getParams($id, $list_value)
+    {
+
+        $arr = array();
+
+        foreach ($list_value as $k2 => $v2) {
+            if ($v2['id'] > $id && $v2['id'] < $id + 5) {
+
+                if ($v2['id'] = $id + 1) {
+                    if ($v2['ds_id'] != "3300_0_5700") {
+
+                        return [
+                            'res' => false,
+                            'param' => $arr
+                        ];
+
+                    }
+
+                }
+                array_push(
+                    $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
+                    'value' => self::prifixValue($v2['ds_id'], $v2['value'])
+                ]);
+
+            }
+            return [
+                'res' => true,
+                'param' => $arr
+            ];
+
+        }
 
 
     }
