@@ -65,7 +65,7 @@ class ReceiveService
             if (!$param['res']) {
                 unset($data[$k]);
             }else{
-                $data[$k]['params'] = $param['param'];
+                $data[$k]['param'] = $param['param'];
 
             }
 
