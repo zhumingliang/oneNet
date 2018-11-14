@@ -59,6 +59,7 @@ class ReceiveService
         foreach ($data as $k => $v) {
 
             $param = self::getParams($v['id'], $value_list);
+
             if (!$param['res']) {
                 unset($data[$k]);
             } else {
@@ -66,13 +67,11 @@ class ReceiveService
 
             }
         }
-        $list['data'] = $data;
+        $list['data'] = array_values($data);
         return $list;
 
 
-
     }
-
 
 
     /**
