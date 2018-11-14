@@ -220,6 +220,13 @@ class Index extends BaseController
         // return json(new SuccessMessage());
         //print_r((new ReceiveT())->saveAll($info));
 
+        $at = strtotime('2018-11-14 01:29:41');
+        for ($i = 0; $i < 7; $i++) {
+            $data=array(
+
+            );
+        }
+
 
     }
 

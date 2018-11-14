@@ -87,7 +87,7 @@ class ReceiveService
 
         }
         $id_arr_in = implode(',', $id_arr);
-        $data_list = ReceiveT::whereIn('id', $id_arr_in)->field('id,ds_id,value')
+        $data_list = ReceiveT::whereIn('id', $id_arr_in)->field('id,ds_id,value,imei')
             ->order('id')
             ->select()->toArray();
         return $data_list;
@@ -102,6 +102,11 @@ class ReceiveService
             $arr = array();
             foreach ($list_value as $k2 => $v2) {
                 if ($v2['id'] > $id && $v2['id'] < $id + 5) {
+
+                    if ($v2['ds_id'] != '3300_0_5700') {
+                        continue;
+
+                    }
                     array_push(
                         $arr, ['value_name' => self::getValueNameAttr($v2['ds_id']),
                         'value' => self::prifixValue($v2['ds_id'], $v2['value'])
