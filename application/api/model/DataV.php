@@ -16,7 +16,8 @@ class DataV extends Model
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
         $time_begin = date("Y-m-d", strtotime($startTime));
-        $time_end = date("Y-m-d", strtotime($endTime));
+        $time_end = addDay(1, $endTime);
+
         $pagingData = self::where('imei', '=', $imei)
             ->whereBetweenTime('create_time', $time_begin, $time_end)
             ->field('id,imei,create_time')
