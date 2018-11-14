@@ -39,7 +39,7 @@ class Index extends BaseController
                 //接受post数据
                 ReceiveService::save($resolved_body);
             }
-            echo $resolved_body;
+            return json(new SuccessMessage());
 
         }
     }
