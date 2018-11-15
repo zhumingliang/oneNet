@@ -62,16 +62,11 @@ class SendService
             if (!$pending_id) {
                 return false;
             }
-
-            LogT::create(['msg' => 'sendId:' . $pending_id]);
-
             /**
              * 发送待处理请求
              */
             $sendParams = self::preParams($imei, $this->X0, $this->Y0, $this->X1, $this->Y1,
                 $this->T1, $this->T2);
-
-            LogT::create(['msg' => $sendParams['content']]);
 
             $output = post($sendParams['url'], $sendParams['header'], $sendParams['content']);
             $output_array = json_decode($output, true);
@@ -83,8 +78,6 @@ class SendService
                     PendingSendT::update(['state' => CommonEnum::SUCCESS], ['id' => $pending_id]);
 
                 }
-                // self::test($pending_id);
-
             } else {
                 LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
             }
@@ -247,16 +240,6 @@ class SendService
         return $res;
     }
 
-    private function test($pending_id)
-    {
-        $pending = PendingSendT::where('id', $pending_id)->find();
-        if ($pending->T1 > 3) {
-            $pending->T1 = ['dec', 1];
-        } else {
-            $pending->T1 = 10;
-        }
-        $pending->save();
-    }
 
 
 }
