@@ -25,12 +25,14 @@ class ReceiveService
     {
         try {
             $ino = ReceiveT::create($msg_arr);
-            if ($ino->value == "IDLE") {
-                //此时代表设备正处于可接受下发数据状态
-                $imei = $ino->imei;
-                (new SendService())->sendToOneNet($imei);
-
+            if ($ino->type != 2) {
+                if ($ino->value == "IDLE") {
+                    //此时代表设备正处于可接受下发数据状态
+                    $imei = $ino->imei;
+                    (new SendService())->sendToOneNet($imei);
+                }
             }
+
         } catch (Exception $e) {
             LogT::create(['msg' => '接受数据失败，原因：' . $e->getMessage()]);
         }

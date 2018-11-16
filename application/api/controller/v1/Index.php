@@ -24,6 +24,9 @@ class Index extends BaseController
     public function index()
     {
 
+       echo date('Y/m/d',1542302093);
+       //echo time();
+
         $raw_input = file_get_contents('php://input');
         $resolved_body = Util::resolveBody($raw_input);
 
