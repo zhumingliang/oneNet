@@ -110,25 +110,7 @@ class Index extends BaseController
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $endTime = addDay(1, $endTime);
-        $list = ReceiveT::where('imei', $imei)
-            ->whereBetweenTime('create_time', $startTime, $endTime)
-            ->field('id,at,imei,type,ds_id,value,dev_id,create_time')
-            ->order('create_time desc')
-            ->select()->toArray();
-
-        $header = array(
-            'id',
-            'at',
-            'imei',
-            'type',
-            'ds_id',
-            'value',
-            'dev_id',
-            'create_time'
-        );
-        $file_name = '数据导出' . '-' . date('Y-m-d', time()) . '.csv';
-        put_csv($list, $header, $file_name);
+        (new ReceiveService())->exportData($imei, $startTime, $endTime);
     }
 
 
@@ -222,9 +204,7 @@ class Index extends BaseController
 
         $at = strtotime('2018-11-14 01:29:41');
         for ($i = 0; $i < 7; $i++) {
-            $data=array(
-
-            );
+            $data = array();
         }
 
 

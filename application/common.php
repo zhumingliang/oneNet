@@ -90,37 +90,101 @@ function delete($url, $header, $content)
  */
 function put_csv($list, $title, $filename)
 {
-    $file_name = $filename;
+    try {
+        $file_name = $filename;
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename=' . $file_name);
+        header('Cache-Control: max-age=0');
+        $file = fopen('php://output', "a");
+        $limit = 1000;
+        $calc = 0;
+        foreach ($title as $v) {
+            $tit[] = iconv('UTF-8', 'GB2312//IGNORE', $v);
+        }
+
+        fputcsv($file, $tit);
+        foreach ($list as $v) {
+
+            $calc++;
+            if ($limit == $calc) {
+                ob_flush();
+                flush();
+                $calc = 0;
+            }
+            foreach ($v as $t) {
+                $t = is_numeric($t) ? $t . "\t" : $t;
+                $tarr[] = iconv('UTF-8', 'GB2312//IGNORE', $t);
+            }
+            fputcsv($file, $tarr);
+            unset($tarr);
+        }
+        unset($list);
+        fclose($file);
+        exit();
+    } catch (\think\Exception $e) {
+        echo $e->getMessage();
+    }
+}
+
+
+function export_csv_1($data = [], $header_data = [], $file_name = '')
+{
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . $file_name);
+    if (!empty($header_data)) {
+        echo iconv('utf-8', 'gbk//TRANSLIT', '"' . implode('","', $header_data) . '"' . "\n");
+    }
+    foreach ($data as $key => $value) {
+        $output = array();
+        $output[] = $value['id'];
+        $output[] = $value['name'];
+        echo iconv('utf-8', 'gbk//TRANSLIT', '"' . implode('","', $output) . "\"\n");
+    }
+}
+
+
+/**
+ * 导出CSV文件
+ * @param array $data 数据
+ * @param array $header_data 首行数据
+ * @param string $file_name 文件名称
+ * @return string
+ */
+function export_csv_2($data = [], $header_data = [], $file_name = '')
+{
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename=' . $file_name);
     header('Cache-Control: max-age=0');
-    $file = fopen('php://output', "a");
-    $limit = 5000;
-    $calc = 0;
-    foreach ($title as $v) {
-        $tit[] = iconv('UTF-8', 'GB2312//IGNORE', $v);
-    }
-    fputcsv($file, $tit);
-    foreach ($list as $v) {
-
-        $calc++;
-        if ($limit == $calc) {
-            ob_flush();
-            flush();
-            $calc = 0;
+    $fp = fopen('php://output', 'a');
+    if (!empty($header_data)) {
+        foreach ($header_data as $key => $value) {
+            $header_data[$key] = iconv('utf-8', 'gbk', $value);
         }
-        foreach ($v as $t) {
-            $t = is_numeric($t) ? $t . "\t" : $t;
-            $tarr[] = iconv('UTF-8', 'GB2312//IGNORE', $t);
-        }
-        fputcsv($file, $tarr);
-        unset($tarr);
+        fputcsv($fp, $header_data);
     }
-    unset($list);
-    fclose($file);
-    exit();
+    $num = 0;
+    //每隔$limit行，刷新一下输出buffer，不要太大，也不要太小
+    $limit = 100000;
+    //逐行取出数据，不浪费内存
+    $count = count($data);
+    if ($count > 0) {
+        for ($i = 0; $i < $count; $i++) {
+            $num++;
+            //刷新一下输出buffer，防止由于数据过多造成问题
+            if ($limit == $num) {
+                ob_flush();
+                flush();
+                $num = 0;
+            }
+            $row = $data[$i];
+            foreach ($row as $key => $value) {
+                $row[$key] = iconv('utf-8', 'gbk', $value);
+            }
+            fputcsv($fp, $row);
+        }
+    }
+    fclose($fp);
 }
-
 
 function addDay($count, $time_old)
 {

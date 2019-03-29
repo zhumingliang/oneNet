@@ -75,6 +75,85 @@ class ReceiveService
     }
 
 
+    public function exportData($imei, $startTime, $endTime)
+    {
+
+        $data = DataV::getListForExport($imei, $startTime, $endTime);
+        $value_list = self::getValueData($data, $imei);
+
+        foreach ($data as $k => $v) {
+
+            $param = self::getParams($v['id'], $value_list);
+
+            if (!$param['res']) {
+                unset($data[$k]);
+            } else {
+                $data_value = $param['param'];
+                foreach ($data_value as $k2 => $v2) {
+                    if ($v2['value_name'] == 'angleX') {
+                        $data[$k]['angleX'] = $v2['value'];
+                    } elseif ($v2['value_name'] == 'angleY') {
+                        $data[$k]['angleY'] = $v2['value'];
+                    } elseif ($v2['value_name'] == 'deviceTemperature') {
+                        $data[$k]['deviceTemperature'] = $v2['value'];
+                    }
+
+                }
+
+
+            }
+        }
+
+        $header = array(
+            'ID',
+            '设备IMEI号',
+            '创建时间',
+            'X轴倾角',
+            'Y轴倾角',
+            '设备温度'
+        );
+        //$file_name = $imei . '-' . $startTime . '-' . $endTime . '.csv';
+        $file_name = $imei  . '.csv';
+        $this->put_csv($data, $header, $file_name);
+
+    }
+
+    function put_csv($list, $title, $filename)
+    {
+
+        $file_name = $filename;
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename=' . $file_name);
+        header('Cache-Control: max-age=0');
+        $file = fopen('php://output', "a");
+        $limit = 1000;
+        $calc = 0;
+        foreach ($title as $v) {
+            $tit[] = iconv('UTF-8', 'GB2312//IGNORE', $v);
+        }
+
+        fputcsv($file, $tit);
+        foreach ($list as $v) {
+
+            $calc++;
+            if ($limit == $calc) {
+                ob_flush();
+                flush();
+                $calc = 0;
+            }
+            foreach ($v as $t) {
+                $t = is_numeric($t) ? $t . "\t" : $t;
+                $tarr[] = iconv('UTF-8', 'GB2312//IGNORE', $t);
+            }
+            fputcsv($file, $tarr);
+            unset($tarr);
+        }
+        unset($list);
+        fclose($file);
+        // exit();
+    }
+
+
     /**
      * 获取所有待处理数据
      * @param $data

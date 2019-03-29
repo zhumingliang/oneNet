@@ -26,4 +26,19 @@ class DataV extends Model
         return $pagingData;
 
     }
+
+
+    public static function getListForExport($imei, $startTime, $endTime)
+    {
+        $time_begin = date("Y-m-d", strtotime($startTime));
+        $time_end = addDay(1, $endTime);
+
+        $pagingData = self::where('imei', '=', $imei)
+           // ->whereBetweenTime('create_time', $time_begin, $time_end)
+            ->field('id,imei,create_time')
+            ->order('create_time desc')
+            ->select()->toArray();
+        return $pagingData;
+
+    }
 }
