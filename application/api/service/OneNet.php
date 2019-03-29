@@ -37,8 +37,10 @@ class OneNet
     {
           $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
           $param = $this->preParamsForAddDevice($params);
-          var_dump($param);
           $device = $sm->device_add($param);
+          if ($device){
+              var_dump($sm->raw_response());
+          }
           var_dump($device);
 
 
