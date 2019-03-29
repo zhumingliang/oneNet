@@ -39,6 +39,7 @@ class OneNet
         $add_device_url = config('onenet.add_device_url');
         $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
         $output_array = json_decode($output, true);
+        print_r($output_array);
         if (isset($output_array['errno']) && $output_array['errno']) {
 
             LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
