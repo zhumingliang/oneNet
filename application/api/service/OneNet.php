@@ -44,7 +44,7 @@ class OneNet
     "protocol": "LWM2M",
     "location": {"lon": 106, "lat": 29, "ele": 370},
     "private": true,
-    "auth_info": {"12123123": "12312312"},
+    "auth_info": {"865820034274550": "460042450500062"},
     "auth":"1233311",
     "obsv": true,
     "other": {"version": "1.0.0", "manu": "china mobile"},
