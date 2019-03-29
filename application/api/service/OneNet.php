@@ -45,26 +45,25 @@ class OneNet
                 'msg' => '创建设备到平台失败失败原因：' . $sm->error(),
                 'errorCode' => 10008
             ]);
-
-            $res = $sm->raw_response();
-            $device_id = $res['data']['device_id'];
-            //保存到数据库
-            $params['device_id'] = $device_id;
-            $params['admin_id'] = 1;
-            $params['state'] = CommonEnum::SUCCESS;
-
-            $device = DeviceT::create($params);
-            if (!$device->id) {
-                throw new OneNetException([
-                    'code' => 401,
-                    'msg' => '保存设备到数据库失败',
-                    'errorCode' => 10009
-                ]);
-            }
-
-            return $device_id;
-            var_dump();
         }
+
+        $res = $sm->raw_response();
+        $device_id = $res['data']['device_id'];
+        //保存到数据库
+        $params['device_id'] = $device_id;
+        $params['admin_id'] = 1;
+        $params['state'] = CommonEnum::SUCCESS;
+
+        $device = DeviceT::create($params);
+        if (!$device->id) {
+            throw new OneNetException([
+                'code' => 401,
+                'msg' => '保存设备到数据库失败',
+                'errorCode' => 10009
+            ]);
+        }
+
+        return $device_id;
 
 
         /* $add_device_url = config('onenet.add_device_url');
@@ -110,7 +109,8 @@ class OneNet
      * @throws \think\exception\DbException
      */
 
-    public function deleteDevice($device_id)
+    public
+    function deleteDevice($device_id)
     {
         //检查设备是欧已经删除
         $device = DeviceT::where('device_id', $device_id)->find();
@@ -160,7 +160,8 @@ class OneNet
      * @param $params
      * @return false|string
      */
-    private function preParamsForAddDevice($params)
+    private
+    function preParamsForAddDevice($params)
     {
         /* $data['title'] = $params['title'];
          $data['protocol'] = "LWM2M";

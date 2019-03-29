@@ -46,8 +46,10 @@ class Device extends BaseController
     {
         (new DeviceValidate())->scene('save')->goCheck();
         $params = $this->request->param();
-        (new OneNet())->addDevice($params);
-        return json(new SuccessMessage());
+        $device_id= (new OneNet())->addDevice($params);
+        return json([
+            'device_id'=>$device_id
+        ]);
 
 
     }
