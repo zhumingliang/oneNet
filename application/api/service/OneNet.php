@@ -23,7 +23,7 @@ class OneNet
     {
         $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
         $header[] = "Content-Type: application/json";
-        $header[] = "Host: api.heclouds.com";
+       // $header[] = "Host: api.heclouds.com";
         $this->header = $header;
     }
 
