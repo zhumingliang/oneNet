@@ -23,7 +23,7 @@ class OneNet
     {
         $header[] = "api-key: MRee0TFqxdtK2bsbyiFLgpmukSY=";
         $header[] = "Content-Type: application/json";
-       // $header[] = "Host: api.heclouds.com";
+        // $header[] = "Host: api.heclouds.com";
         $this->header = $header;
     }
 
@@ -35,67 +35,68 @@ class OneNet
      */
     public function addDevice($params)
     {
-          $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
-          $param = $this->preParamsForAddDevice($params);
-          $device = $sm->device_add($param);
-          if (!$device){
-              LogT::create(['msg' => 'errno:' . $sm->error_no() . 'error:' . $sm->error()]);
-              throw new OneNetException([
-                  'code' => 401,
-                  'msg' => '创建设备到平台失败失败原因：' . $sm->error(),
-                  'errorCode' => 10008
-              ]);
-
-              $device_id = $sm->raw_response();
-              //保存到数据库
-              $params['device_id'] = $device_id;
-              $params['admin_id'] = 1;
-              $params['state'] = CommonEnum::SUCCESS;
-
-              $device = DeviceT::create($params);
-              if (!$device->id) {
-                  throw new OneNetException([
-                      'code' => 401,
-                      'msg' => '保存设备到数据库失败',
-                      'errorCode' => 10009
-                  ]);
-              }
-
-              return $device_id;
-          }
-
-
-
-       /* $add_device_url = config('onenet.add_device_url');
-        $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
-        $output_array = json_decode($output, true);
-        print_r($output_array);
-        if (isset($output_array['errno']) && $output_array['errno']) {
-
-            LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
+        $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
+        $param = $this->preParamsForAddDevice($params);
+        $device = $sm->device_add($param);
+        if (!$device) {
+            LogT::create(['msg' => 'errno:' . $sm->error_no() . 'error:' . $sm->error()]);
             throw new OneNetException([
                 'code' => 401,
-                'msg' => '创建设备到平台失败失败原因：' . $output_array['error'],
+                'msg' => '创建设备到平台失败失败原因：' . $sm->error(),
                 'errorCode' => 10008
             ]);
 
-        }
-        $device_id = $output_array['data']['device_id'];
-        //保存到数据库
-        $params['device_id'] = $device_id;
-        $params['admin_id'] = 1;
-        $params['state'] = CommonEnum::SUCCESS;
+            $res = $sm->raw_response();
+            $device_id = $res['data']['device_id'];
+            //保存到数据库
+            $params['device_id'] = $device_id;
+            $params['admin_id'] = 1;
+            $params['state'] = CommonEnum::SUCCESS;
 
-        $device = DeviceT::create($params);
-        if (!$device->id) {
-            throw new OneNetException([
-                'code' => 401,
-                'msg' => '保存设备到数据库失败',
-                'errorCode' => 10009
-            ]);
+            $device = DeviceT::create($params);
+            if (!$device->id) {
+                throw new OneNetException([
+                    'code' => 401,
+                    'msg' => '保存设备到数据库失败',
+                    'errorCode' => 10009
+                ]);
+            }
+
+            return $device_id;
+            var_dump();
         }
 
-        return $device_id;*/
+
+        /* $add_device_url = config('onenet.add_device_url');
+         $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
+         $output_array = json_decode($output, true);
+         print_r($output_array);
+         if (isset($output_array['errno']) && $output_array['errno']) {
+
+             LogT::create(['msg' => 'errno:' . $output_array['errno'] . 'error:' . $output_array['error']]);
+             throw new OneNetException([
+                 'code' => 401,
+                 'msg' => '创建设备到平台失败失败原因：' . $output_array['error'],
+                 'errorCode' => 10008
+             ]);
+
+         }
+         $device_id = $output_array['data']['device_id'];
+         //保存到数据库
+         $params['device_id'] = $device_id;
+         $params['admin_id'] = 1;
+         $params['state'] = CommonEnum::SUCCESS;
+
+         $device = DeviceT::create($params);
+         if (!$device->id) {
+             throw new OneNetException([
+                 'code' => 401,
+                 'msg' => '保存设备到数据库失败',
+                 'errorCode' => 10009
+             ]);
+         }
+
+         return $device_id;*/
 
 
     }
@@ -167,7 +168,7 @@ class OneNet
          $data = json_encode($data);*/
         $data = '{ "title": "%s", "protocol": "LWM2M", "auth_info": {"%s": "%s"}}';
 
-        return sprintf($data,$params['title'],$params['imei'],$params['imsi']);
+        return sprintf($data, $params['title'], $params['imei'], $params['imsi']);
 
     }
 
