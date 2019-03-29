@@ -134,7 +134,6 @@ class OneNet
         $data['protocol'] = "LWM2M";
         $data['auth_info'] = json_encode([$params['imei'] => $params['imsi']]);
         $data=json_encode($data);
-        echo $data;
         return $data;
 
 
