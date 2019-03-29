@@ -137,17 +137,13 @@ class OneNet
      */
     private function preParamsForAddDevice($params)
     {
-        $data['title'] = $params['title'];
-        $data['protocol'] = "LWM2M";
-        $data['auth_info'] = json_encode([$params['imei'] => $params['imsi']]);
-        $data = json_encode($data);
-        echo $data;
-        return '{
-    "title": "mydevice",
-    "protocol": "LWM2M",
-    "auth_info": {"865820034274551": "460042450500062"}
-}';
+        /* $data['title'] = $params['title'];
+         $data['protocol'] = "LWM2M";
+         $data['auth_info'] = json_encode([$params['imei'] => $params['imsi']]);
+         $data = json_encode($data);*/
+        $data = '{ "title": "%s", "protocol": "LWM2M", "auth_info": {"%s": "%s"}}';
 
+        return sprintf($data,$params['title'],$params['imei'],$params['imsi']);
 
     }
 
