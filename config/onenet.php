@@ -8,7 +8,7 @@
 
 return [
     'send_url' => "http://api.heclouds.com/nbiot?imei=%s&obj_id=%s&obj_inst_id=%s&time_out=%s&mode=2",
-    'add_device_url' => "http://api.heclouds.com/devices HTTP/1.1",
+    'add_device_url' => "http://api.heclouds.com/devices",
     //'delete_device_url' => "https://api.heclouds.com/devices/%s",
     'delete_device_url' => "https://api.heclouds.com/devices/%s",
     'imei' => '86582003131318',
