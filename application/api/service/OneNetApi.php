@@ -932,7 +932,6 @@ class OneNetApi
         $ori_ret = $ret;
 
         $ret = @json_decode($ret, TRUE);
-        print_r($ret);
 
         if (empty($ret)) {
             $ret = FALSE;
