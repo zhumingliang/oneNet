@@ -37,6 +37,20 @@ class OneNet
     {
         $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
         $param = $this->preParamsForAddDevice($params);
+        $param = '{
+    "title": "mydevice",
+    "desc": "some description",
+    "tags": ["china", "mobile"],
+    "protocol": "LWM2M",
+    "location": {"lon": 106, "lat": 29, "ele": 370},
+    "private": true,
+    "auth_info": {"12123123": "12312312"},
+    "auth":"1233311",
+    "obsv": true,
+    "other": {"version": "1.0.0", "manu": "china mobile"},
+    "chip":1,
+    "psk":"dafdfdsafd" 
+}';
         var_dump($param);
         $device = $sm->device_add($param);
         var_dump($device);
