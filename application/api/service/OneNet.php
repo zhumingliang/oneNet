@@ -48,8 +48,8 @@ class OneNet
         }
 
         $res = $sm->raw_response();
-        var_dump($res);
         $res=json_decode($res);
+        var_dump($res);
         $device_id = $res->data['device_id'];
         //保存到数据库
         $params['device_id'] = $device_id;
