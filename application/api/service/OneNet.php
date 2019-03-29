@@ -35,14 +35,14 @@ class OneNet
      */
     public function addDevice($params)
     {
-        /*  $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
+          $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
           $param = $this->preParamsForAddDevice($params);
           var_dump($param);
           $device = $sm->device_add($param);
-          var_dump($device);*/
+          var_dump($device);
 
 
-        $add_device_url = config('onenet.add_device_url');
+       /* $add_device_url = config('onenet.add_device_url');
         $output = post($add_device_url, $this->header, $this->preParamsForAddDevice($params));
         $output_array = json_decode($output, true);
         print_r($output_array);
@@ -71,7 +71,7 @@ class OneNet
             ]);
         }
 
-        return $device_id;
+        return $device_id;*/
 
 
     }
