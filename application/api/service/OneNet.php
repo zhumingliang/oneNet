@@ -38,10 +38,32 @@ class OneNet
           $sm = new OneNetApi("MRee0TFqxdtK2bsbyiFLgpmukSY=", "http://api.heclouds.com");
           $param = $this->preParamsForAddDevice($params);
           $device = $sm->device_add($param);
-          if ($device){
-              var_dump($sm->raw_response());
+          if (!$device){
+              LogT::create(['msg' => 'errno:' . $sm->error_no() . 'error:' . $sm->error()]);
+              throw new OneNetException([
+                  'code' => 401,
+                  'msg' => '创建设备到平台失败失败原因：' . $sm->error(),
+                  'errorCode' => 10008
+              ]);
+
+              $device_id = $sm->raw_response();
+              //保存到数据库
+              $params['device_id'] = $device_id;
+              $params['admin_id'] = 1;
+              $params['state'] = CommonEnum::SUCCESS;
+
+              $device = DeviceT::create($params);
+              if (!$device->id) {
+                  throw new OneNetException([
+                      'code' => 401,
+                      'msg' => '保存设备到数据库失败',
+                      'errorCode' => 10009
+                  ]);
+              }
+
+              return $device_id;
           }
-          var_dump($device);
+
 
 
        /* $add_device_url = config('onenet.add_device_url');
