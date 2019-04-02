@@ -103,31 +103,9 @@ class ReceiveService
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $data = DataV::getListForExport($imei, $startTime, $endTime);
-        $value_list = self::getValueData($data, $imei);
-
-        foreach ($data as $k => $v) {
-
-            $param = self::getParams($v['id'], $value_list);
-
-            if (!$param['res']) {
-                unset($data[$k]);
-            } else {
-                $data_value = $param['param'];
-                foreach ($data_value as $k2 => $v2) {
-                    if ($v2['value_name'] == 'angleX') {
-                        $data[$k]['angleX'] = $v2['value'];
-                    } elseif ($v2['value_name'] == 'angleY') {
-                        $data[$k]['angleY'] = $v2['value'];
-                    } elseif ($v2['value_name'] == 'deviceTemperature') {
-                        $data[$k]['deviceTemperature'] = $v2['value'];
-                    }
-
-                }
-
-
-            }
-        }
+        $list = ListV::getListForExport($imei, $startTime, $endTime);
+        $data = $list['data'];
+        $list['data'] = self::dataListFormat($data);
 
         $header = array(
             'ID',
