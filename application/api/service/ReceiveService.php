@@ -10,6 +10,7 @@ namespace app\api\service;
 
 
 use app\api\model\DataV;
+use app\api\model\ListV;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
 use think\Exception;
@@ -53,27 +54,51 @@ class ReceiveService
      */
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
-        $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
+        /*  $list = DataV::getList($imei, $startTime, $endTime, $page, $size);
+           $data = $list['data'];
+           $value_list = self::getValueData($data, $imei);
+
+           foreach ($data as $k => $v) {
+
+               $param = self::getParams($v['id'], $value_list);
+
+               if (!$param['res']) {
+                   unset($data[$k]);
+               } else {
+                   $data[$k]['param'] = $param['param'];
+
+               }
+           }
+           $list['data'] = array_values($data);
+           return $list;*/
+
+        $list = ListV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
-        $value_list = self::getValueData($data, $imei);
-
-        foreach ($data as $k => $v) {
-
-            $param = self::getParams($v['id'], $value_list);
-
-            if (!$param['res']) {
-                unset($data[$k]);
-            } else {
-                $data[$k]['param'] = $param['param'];
-
-            }
-        }
-        $list['data'] = array_values($data);
+        $list['data'] = self::dataListFormat($data);
         return $list;
 
 
     }
 
+
+    private static function dataListFormat($data)
+    {
+        if (!count($data)) {
+            return $data;
+        }
+        foreach ($data as $k => $v) {
+            $value = $v['value'];
+            $value_arr = explode('|', $value);
+            unset($data[$k]['value']);
+            $data[$k]['angleX'] = $value_arr[1];
+            $data[$k]['angleY'] = $value_arr[2];
+            $data[$k]['deviceTemperature'] = $value_arr[3];
+
+
+        }
+        return $data;
+
+    }
 
     public function exportData($imei, $startTime, $endTime)
     {
@@ -113,7 +138,7 @@ class ReceiveService
             '设备温度'
         );
         //$file_name = $imei . '-' . $startTime . '-' . $endTime . '.csv';
-        $file_name = $imei  . '.csv';
+        $file_name = $imei . '.csv';
         $this->put_csv($data, $header, $file_name);
 
     }

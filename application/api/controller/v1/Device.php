@@ -172,6 +172,9 @@ class Device extends BaseController
      * @apiSuccess (返回参数说明) {String} create_time 创建时间
      * @return \think\response\Json
      * @throws \app\lib\exception\ParameterException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function getCurrentValue()
     {

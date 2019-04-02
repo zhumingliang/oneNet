@@ -58,7 +58,7 @@ class Index extends BaseController
      * @apiParam (请求参数说明) {String} page   当前页数
      * @apiParam (请求参数说明) {String} size   每页条数
      * @apiSuccessExample {json} 返回样例:
-     * {"total":52,"per_page":"2","current_page":1,"last_page":26,"data":[{"id":3126,"imei":"865820035119960","create_time":"2018-10-19 22:08:28","param":[{"value_name":"X值","value":"-68"},{"value_name":"Y值","value":"-9"},{"value_name":"传感器温度","value":"3459"},{"value_name":"传递参数","value":"0A0A0A0A2A3A"}]},{"id":3117,"imei":"865820035119960","create_time":"2018-10-19 22:01:45","param":[{"value_name":"X值","value":"-68"},{"value_name":"Y值","value":"-9"},{"value_name":"传感器温度","value":"3459"},{"value_name":"传递参数","value":"0A0A0A0A2A3A"}]}]}
+     * {"total":60,"per_page":"1","current_page":1,"last_page":60,"data":[{"id":95686,"imei":"865820034279286","create_time":"2019-04-02 08:49:20","angleX":"0","angleY":"0","deviceTemperature":"0"}]}
      * @apiSuccess (返回参数说明) {int} per_page 每页多少条数据
      * @apiSuccess (返回参数说明) {int} current_page 当前页码
      * @apiSuccess (返回参数说明) {int} last_page 最后页码
@@ -66,9 +66,9 @@ class Index extends BaseController
      * @apiSuccess (返回参数说明) {int} id 数据id
      * @apiSuccess (返回参数说明) {String} imei 设备IMEI
      * @apiSuccess (返回参数说明) {String} create_time 接受数据时间
-     * @apiSuccess (返回参数说明) {OBJ} param 接受参数
-     * @apiSuccess (返回参数说明) {String} value_name 参数描述
-     * @apiSuccess (返回参数说明) {String} value 参数值
+     * @apiSuccess (返回参数说明) {String} angleX X轴倾角
+     * @apiSuccess (返回参数说明) {String} angleY Y轴倾角
+     * @apiSuccess (返回参数说明) {String} deviceTemperature 设备温度
      *
      * @param $imei
      * @param $startTime

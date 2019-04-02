@@ -9,6 +9,7 @@
 namespace app\api\service;
 
 
+use app\api\model\ListV;
 use app\api\model\PendingSendT;
 use app\api\model\ReceiveT;
 
@@ -18,16 +19,19 @@ class DeviceService
      * 获取设备实时的值
      * @param $imei
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function getCurrentValue($imei)
     {
-        $x = ReceiveT::getCurrentX($imei);
-        $y = ReceiveT::getCurrentY($imei);
-
+        $info = ListV::where('imei', $imei)->order('create_time desc')->find();
+        $data = $info['value'];
+        $data_arr = explode('|', $data);
         return [
-            'create_time'=>$x['create_time'],
-            'x' => $x ? $x['value'] / 100 : 0,
-            'y' => $y ? $y['value'] / 100 : 0
+            'create_time' => $info['create_time'],
+            'x' => $data_arr[1] / 100,
+            'y' => $data_arr[2] / 100
         ];
 
     }
