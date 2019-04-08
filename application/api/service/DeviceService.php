@@ -26,6 +26,13 @@ class DeviceService
     public function getCurrentValue($imei)
     {
         $info = ListV::where('imei', $imei)->order('create_time desc')->find();
+        if (!$info) {
+            return [
+                'create_time' =>0,
+                'x' =>0,
+                'y' => 0
+            ];
+        }
         $data = $info['value'];
         $data_arr = explode('|', $data);
         return [
