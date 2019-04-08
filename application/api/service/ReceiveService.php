@@ -25,6 +25,7 @@ class ReceiveService
     public static function save($msg_arr)
     {
         try {
+            $msg_arr['state'] = 1;
             $ino = ReceiveT::create($msg_arr);
             if ($ino->type != 2) {
                 if ($ino->value == "IDLE") {
@@ -90,9 +91,9 @@ class ReceiveService
             $value = $v['value'];
             $value_arr = explode('|', $value);
             unset($data[$k]['value']);
-            $data[$k]['angleX'] = $value_arr[1]/100;
-            $data[$k]['angleY'] = $value_arr[2]/100;
-            $data[$k]['deviceTemperature'] = $value_arr[3]/100;
+            $data[$k]['angleX'] = $value_arr[1] / 100;
+            $data[$k]['angleY'] = $value_arr[2] / 100;
+            $data[$k]['deviceTemperature'] = $value_arr[3] / 100;
 
 
         }
