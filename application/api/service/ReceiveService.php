@@ -105,8 +105,8 @@ class ReceiveService
     {
 
         $list = ListV::getListForExport($imei, $startTime, $endTime);
-        $data = $list['data'];
-        $list['data'] = self::dataListFormat($data);
+       // $data = $list['data'];
+        //$list['data'] = self::dataListFormat($data);
 
         $header = array(
             'ID',
@@ -118,7 +118,7 @@ class ReceiveService
         );
         //$file_name = $imei . '-' . $startTime . '-' . $endTime . '.csv';
         $file_name = $imei . '.csv';
-        $this->put_csv($data, $header, $file_name);
+        $this->put_csv($list, $header, $file_name);
 
     }
 
