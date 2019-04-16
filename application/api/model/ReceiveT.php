@@ -78,5 +78,21 @@ class ReceiveT extends Model
 
     }
 
+    public static function getListForExport($imei, $startTime, $endTime)
+    {
+        $time_begin = date("Y-m-d", strtotime($startTime));
+        $time_end = addDay(1, $endTime);
+
+        $pagingData = self::where('imei', '=', $imei)
+            ->whereBetweenTime('create_time', $time_begin, $time_end)
+            ->where('ds_id', '=', '3300_0_5751')
+            ->field('id,imei,create_time,value')
+            ->order('create_time desc')
+            ->select()->toArray();
+
+        return $pagingData;
+
+    }
+
 
 }

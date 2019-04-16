@@ -35,7 +35,7 @@ class ListV extends Model
 
         $pagingData = self::where('imei', '=', $imei)
              ->whereBetweenTime('create_time', $time_begin, $time_end)
-            ->field('id,imei,create_time')
+            ->field('id,imei,value,create_time')
             ->order('create_time desc')
             ->select()->toArray();
         return $pagingData;

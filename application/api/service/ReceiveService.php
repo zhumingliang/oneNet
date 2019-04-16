@@ -104,8 +104,10 @@ class ReceiveService
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $list = ListV::getListForExport($imei, $startTime, $endTime);
-       // $data = $list['data'];
+        $list = ReceiveT::getListForExport($imei, $startTime, $endTime);
+        $list = self::dataListFormat($list);
+
+        // $data = $list['data'];
         //$list['data'] = self::dataListFormat($data);
 
         $header = array(
