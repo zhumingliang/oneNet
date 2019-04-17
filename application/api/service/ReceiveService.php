@@ -13,6 +13,7 @@ use app\api\model\DataV;
 use app\api\model\ListV;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
+use function Couchbase\passthruEncoder;
 use think\Exception;
 
 class ReceiveService
@@ -104,12 +105,8 @@ class ReceiveService
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $list = ReceiveT::getListForExport($imei, $startTime, $endTime);
+        $list = ListV::getListForExport($imei, $startTime, $endTime);
         $list = self::dataListFormat($list);
-
-        // $data = $list['data'];
-        //$list['data'] = self::dataListFormat($data);
-
         $header = array(
             'ID',
             '设备IMEI号',
@@ -118,7 +115,6 @@ class ReceiveService
             'Y轴倾角',
             '设备温度'
         );
-        //$file_name = $imei . '-' . $startTime . '-' . $endTime . '.csv';
         $file_name = $imei . '.csv';
         $this->put_csv($list, $header, $file_name);
 
