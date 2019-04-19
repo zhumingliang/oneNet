@@ -15,6 +15,7 @@ use app\api\model\PendingSendT;
 use app\api\model\SendResT;
 use app\lib\enum\CommonEnum;
 use app\lib\exception\OneNetException;
+use think\Exception;
 
 class SendService
 {
@@ -48,9 +49,6 @@ class SendService
      * 向传感器发送数据
      * @param $imei
      * @return bool
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function sendToOneNet($imei)
     {
