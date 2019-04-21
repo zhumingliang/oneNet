@@ -25,6 +25,7 @@ class Index extends BaseController
     {
         $raw_input = file_get_contents('php://input');
         $resolved_body = Util::resolveBody($raw_input);
+        LogT::create(['msg' => json_encode($resolved_body)]);
 
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
