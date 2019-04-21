@@ -206,7 +206,7 @@ class Index extends BaseController
 
     public function test()
     {
-        echo 1;
+        LogT::create(['msg'=>1]);
     }
 
 
