@@ -43,7 +43,7 @@ return [
     },
     // onMessage
     'onMessage' => function ($connection, $data) {
-        $raw_input = $data;// file_get_contents('php://input');
+        $raw_input = file_get_contents('php://input');
         $resolved_body = \app\api\service\Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
