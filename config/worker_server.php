@@ -15,22 +15,22 @@ use think\facade\Env;
 // +----------------------------------------------------------------------
 return [
     // 扩展自身需要的配置
-    'protocol'       => 'http', // 协议 支持 tcp udp unix http websocket text
-    'host'           => '0.0.0.0', // 监听地址
-    'port'           => 2345, // 监听端口
-    'socket'         => '', // 完整监听地址
-    'context'        => [], // socket 上下文选项
-    'worker_class'   => '', // 自定义Workerman服务类名 支持数组定义多个服务
-    'root'                  => '', // WEB 根目录 默认会定位public目录
+    'protocol' => 'http', // 协议 支持 tcp udp unix http websocket text
+    'host' => '0.0.0.0', // 监听地址
+    'port' => 2345, // 监听端口
+    'socket' => '', // 完整监听地址
+    'context' => [], // socket 上下文选项
+    'worker_class' => '', // 自定义Workerman服务类名 支持数组定义多个服务
+    'root' => '', // WEB 根目录 默认会定位public目录
     // 支持workerman的所有配置参数
-    'name'           => 'thinkphp',
-    'count'          => 4,
-    'daemonize'      => false,
-    'pidFile'        => Env::get('runtime_path') . 'worker.pid',
+    'name' => 'thinkphp',
+    'count' => 4,
+    'daemonize' => false,
+    'pidFile' => Env::get('runtime_path') . 'worker.pid',
 
     // 支持事件回调
     // onWorkerStart
-    'onWorkerStart'  => function ($worker) {
+    'onWorkerStart' => function ($worker) {
 
     },
     // onWorkerReload
@@ -38,20 +38,32 @@ return [
 
     },
     // onConnect
-    'onConnect'      => function ($connection) {
+    'onConnect' => function ($connection) {
 
     },
     // onMessage
-    'onMessage'      => function ($connection, $data) {
-    \app\api\model\LogT::create(['msg'=>json_encode($data)]);
-        //$connection->send('receive success');
+    'onMessage' => function ($connection, $data) {
+        $raw_input = $data;// file_get_contents('php://input');
+        $resolved_body = \app\api\service\Util::resolveBody($raw_input);
+        if ($_SERVER['REQUEST_METHOD'] == "GET") {
+            //初始化验证
+            $connection->send($resolved_body);
+
+        } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            if (!$resolved_body) {
+                \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($this->request->param)]);
+            }
+            \app\api\service\ReceiveService::save($this->request->param('msg'));
+
+        }
+
     },
     // onClose
-    'onClose'        => function ($connection) {
+    'onClose' => function ($connection) {
 
     },
     // onError
-    'onError'        => function ($connection, $code, $msg) {
+    'onError' => function ($connection, $code, $msg) {
         echo "error [ $code ] $msg\n";
     },
 ];
