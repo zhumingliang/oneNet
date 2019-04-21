@@ -14,6 +14,7 @@ Route::get('think', function () {
 });
 
 Route::get('hello/:name', 'index/hello');
+Route::rule('/', 'api/:version.Index/test');
 
 Route::rule('api/:version/index', 'api/:version.Index/index');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
