@@ -26,11 +26,9 @@ class Index extends BaseController
         $raw_input = file_get_contents('php://input');
         $resolved_body = Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
-            /* //初始化验证
-             echo $resolved_body;*/
+            //初始化验证
+            echo $resolved_body;
 
-            $result = $_GET['msg'];
-            echo "$result";
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (!$resolved_body) {
                 LogT::create(['msg' => "数据为空---" . json_encode($this->request->param)]);
@@ -208,7 +206,7 @@ class Index extends BaseController
 
     public function test()
     {
-        LogT::create(['msg' => 1]);
+        LogT::create(['msg'=>1]);
     }
 
 

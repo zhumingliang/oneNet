@@ -21,7 +21,7 @@ return [
     'socket'         => '', // 完整监听地址
     'context'        => [], // socket 上下文选项
     'worker_class'   => '', // 自定义Workerman服务类名 支持数组定义多个服务
-
+    'root'                  => '', // WEB 根目录 默认会定位public目录
     // 支持workerman的所有配置参数
     'name'           => 'thinkphp',
     'count'          => 4,
@@ -43,7 +43,8 @@ return [
     },
     // onMessage
     'onMessage'      => function ($connection, $data) {
-        $connection->send('receive success');
+    \app\api\model\LogT::create(['msg'=>json_encode($data)]);
+        //$connection->send('receive success');
     },
     // onClose
     'onClose'        => function ($connection) {
