@@ -13,8 +13,7 @@ Route::get('think', function () {
     return 'hello,ThinkPHP5!';
 });
 
-Route::get('hello/:name', 'index/hello');
-Route::rule('/', 'api/:version.Index/test');
+Route::rule('/', 'api/v1.Index/test');
 
 Route::rule('api/:version/index', 'api/:version.Index/index');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
