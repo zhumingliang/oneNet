@@ -31,15 +31,17 @@ class Index extends BaseController
             echo $resolved_body;
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            if (!$resolved_body) {
-                LogT::create(['msg' => "数据为空"]);
+            /*  if (!$resolved_body) {
+                  LogT::create(['msg' => "数据为空"]);
 
-            } else {
-                //接受post数据
-                ReceiveService::save($resolved_body);
-            }
+              } else {
+                  //接受post数据
+                  ReceiveService::save($resolved_body);
+              }*/
             //echo "ok";
             //return json(new SuccessMessage());
+            ReceiveService::save($this->request->param('msg'));
+
 
         }
     }
