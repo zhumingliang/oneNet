@@ -9,11 +9,11 @@
 namespace app\api\service;
 
 
-use app\api\model\DataV;
 use app\api\model\ListV;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
-use function Couchbase\passthruEncoder;
+use app\api\model\ReceiveV;
+use think\Db;
 use think\Exception;
 
 class ReceiveService
@@ -74,7 +74,12 @@ class ReceiveService
            $list['data'] = array_values($data);
            return $list;*/
 
-        $list = ListV::getList($imei, $startTime, $endTime, $page, $size);
+        /*     $list = ListV::getList($imei, $startTime, $endTime, $page, $size);
+             $data = $list['data'];
+             $list['data'] = self::dataListFormat($data);
+             return $list;   */
+
+        $list = ReceiveV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
         $list['data'] = self::dataListFormat($data);
         return $list;
@@ -92,9 +97,9 @@ class ReceiveService
             $value = $v['value'];
             $value_arr = explode('|', $value);
             unset($data[$k]['value']);
-            $data[$k]['angleX'] = $value_arr[1] / 100;
-            $data[$k]['angleY'] = $value_arr[2] / 100;
-            $data[$k]['deviceTemperature'] = $value_arr[3] / 100;
+            $data[$k]['angleX'] = is_numeric($value_arr[1]) ? $value_arr[1] / 100 : 0;
+            $data[$k]['angleY'] = is_numeric($value_arr[2]) ? $value_arr[2] / 100 : 0;
+            $data[$k]['deviceTemperature'] = is_numeric($value_arr[3]) ? $value_arr[3] / 100 : 0;
 
 
         }
@@ -105,7 +110,7 @@ class ReceiveService
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $list = ListV::getListForExport($imei, $startTime, $endTime);
+        $list = ReceiveV::getListForExport($imei, $startTime, $endTime);
         $list = self::dataListFormat($list);
         $header = array(
             'ID',
@@ -253,5 +258,6 @@ class ReceiveService
 
         return $value;
     }
+
 
 }

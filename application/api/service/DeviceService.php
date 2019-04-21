@@ -12,6 +12,7 @@ namespace app\api\service;
 use app\api\model\ListV;
 use app\api\model\PendingSendT;
 use app\api\model\ReceiveT;
+use app\api\model\ReceiveV;
 
 class DeviceService
 {
@@ -25,11 +26,11 @@ class DeviceService
      */
     public function getCurrentValue($imei)
     {
-        $info = ListV::where('imei', $imei)->order('create_time desc')->find();
+        $info = ReceiveV::getCurrentValue($imei);
         if (!$info) {
             return [
-                'create_time' =>0,
-                'x' =>0,
+                'create_time' => 0,
+                'x' => 0,
                 'y' => 0
             ];
         }
@@ -37,8 +38,8 @@ class DeviceService
         $data_arr = explode('|', $data);
         return [
             'create_time' => $info['create_time'],
-            'x' => $data_arr[1] / 100,
-            'y' => $data_arr[2] / 100
+            'x' => is_numeric($data_arr[1]) ? $data_arr[1] / 100 : 0,
+            'y' => is_numeric($data_arr[2]) ? $data_arr[2] / 100 : 0
         ];
 
     }
