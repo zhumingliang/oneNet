@@ -25,7 +25,7 @@ return [
     'file_monitor_path'     => [], // 文件监控目录 默认监控application和config目录
 
     // 支持workerman的所有配置参数
-    'name'                  => 'onenet',
+    'name'                  => 'thinkphp',
     'count'                 => 4,
     'daemonize'             => false,
     'pidFile'               => Env::get('runtime_path') . 'worker.pid',
