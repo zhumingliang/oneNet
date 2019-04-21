@@ -50,9 +50,9 @@ class Util
      */
     protected static function _handleRuleMsg($body, $token)
     {
-        $new_sig = md5($token . $body['nonce'] . json_encode($body['msg']));
-        $new_sig = rtrim(base64_encode(pack('H*', strtoupper($new_sig))), '=');
-        if ($new_sig == rtrim($body['msg_signature'], '=')) {
+        $new_sig = md5($token . $body['nonce'] . json_encode($body['msg'], JSON_UNESCAPED_SLASHES));
+        $new_sig = rtrim(base64_encode(pack('H*', strtoupper($new_sig))),'=');
+        if ($new_sig == rtrim($body['msg_signature'],'=')) {
             return $body['msg'];
         } else {
             return FALSE;
@@ -72,9 +72,7 @@ class Util
         $secure_key = substr($aes_key, 0, 32);
         $iv = substr($aes_key, 0, 16);
         $msg = openssl_decrypt($enc_msg, 'AES-256-CBC', $secure_key, OPENSSL_RAW_DATA, $iv);
-        $pattern = '/.*(\{.*\})/';
-        $msg = preg_replace($pattern, '${1}', $msg);
-        return $msg;
+        return substr($msg, 20);
     }
 
     /**
