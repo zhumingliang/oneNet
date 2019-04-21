@@ -16,7 +16,7 @@ use think\facade\Env;
 return [
     // 扩展自身需要的配置
     'protocol'       => 'websocket', // 协议 支持 tcp udp unix http websocket text
-    'host'                  => '0.0.0.0', // 监听地址
+    'host'                  => 'http://oil.mengant.cn', // 监听地址
     'port'                  => 2346, // 监听端口
     'root'                  => '/', // WEB 根目录 默认会定位public目录
     'app_path'              => '', // 应用目录 守护进程模式必须设置（绝对路径）
@@ -25,7 +25,7 @@ return [
     'file_monitor_path'     => [], // 文件监控目录 默认监控application和config目录
 
     // 支持workerman的所有配置参数
-    'name'                  => 'thinkphp',
+    'name'                  => 'onenet',
     'count'                 => 4,
     'daemonize'             => false,
     'pidFile'               => Env::get('runtime_path') . 'worker.pid',
