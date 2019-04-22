@@ -42,7 +42,7 @@ return [
     },
     // onMessage
     'onMessage' => function ($connection, $data) {
-        \app\api\model\LogT::create(['msg' => "数据为空---" . $data]);
+        \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
         /* $raw_input = file_get_contents('php://input');
          \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);*/
         // $resolved_body = \app\api\service\Util::resolveBody($raw_input);
