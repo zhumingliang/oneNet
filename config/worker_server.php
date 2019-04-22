@@ -44,6 +44,8 @@ return [
     // onMessage
     'onMessage' => function ($connection, $data) {
         $raw_input = file_get_contents('php://input');
+        \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);
+
         $resolved_body = \app\api\service\Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
@@ -51,9 +53,10 @@ return [
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (!$resolved_body) {
-                \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($this->request->param)]);
+                \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($this->request->param())]);
             }
             \app\api\service\ReceiveService::save($this->request->param('msg'));
+            $connection->send('success');
 
         }
 
