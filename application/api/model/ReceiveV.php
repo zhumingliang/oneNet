@@ -67,7 +67,7 @@ class ReceiveV
             ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.create_time=b.create_time')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
-            ->order('create_time desc')
+            ->order('a.create_time desc')
            ->find();
         return $info;
 
