@@ -55,7 +55,7 @@ return [
                  \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
              }*/
             \app\api\service\ReceiveService::save(\think\facade\Request::param('msg'));
-
+            $connection->send('success');
 
         }
     },
