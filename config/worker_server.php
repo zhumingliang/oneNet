@@ -47,7 +47,7 @@ return [
        // $resolved_body = \app\api\service\Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
-            $connection->send($data['msg']);
+            $connection->send(\think\facade\Request::param('msg'));
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
            // \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode(\think\facade\Request::param('msg'))]);
