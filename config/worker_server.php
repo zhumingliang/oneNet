@@ -42,17 +42,15 @@ return [
     },
     // onMessage
     'onMessage' => function ($connection, $data) {
-       // $data = json_decode($data,true);
-        \app\api\model\LogT::create(['msg' => json_encode($data)]);
-        $msg = $data['post']['msg'];
-        /* $raw_input = file_get_contents('php://input');
-         \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);*/
-        // $resolved_body = \app\api\service\Util::resolveBody($raw_input);
+        $data = json_encode($data);
+        \app\api\model\LogT::create(['msg' =>$data]);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
             $connection->send(\think\facade\Request::param('msg'));
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $data = json_decode($data, true);
+            $msg = $data['post']['msg'];
             \app\api\service\ReceiveService::save($msg);
             $connection->send('success');
 
