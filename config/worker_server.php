@@ -50,11 +50,11 @@ return [
             $connection->send($data['msg']);
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode(\think\facade\Request::param('msg'))]);
+           // \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode(\think\facade\Request::param('msg'))]);
             /* if (!$resolved_body) {
                  \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
              }*/
-            //\app\api\service\ReceiveService::save(\think\facade\Request::param('msg'));
+            \app\api\service\ReceiveService::save(\think\facade\Request::param('msg'));
 
 
         }
