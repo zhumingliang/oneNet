@@ -89,17 +89,22 @@ class ReceiveService
 
     private static function dataListFormat($data)
     {
+
+
         if (!count($data)) {
             return $data;
         }
         foreach ($data as $k => $v) {
-            $value = $v['value'];
-            $value_arr = explode('|', $value);
-            unset($data[$k]['value']);
-            $data[$k]['angleX'] = is_numeric($value_arr[1]) ? $value_arr[1] / 100 : 0;
-            $data[$k]['angleY'] = is_numeric($value_arr[2]) ? $value_arr[2] / 100 : 0;
-            $data[$k]['deviceTemperature'] = is_numeric($value_arr[3]) ? $value_arr[3] / 100 : 0;
+            try {
+                $value = $v['value'];
+                $value_arr = explode('|', $value);
+                unset($data[$k]['value']);
+                $data[$k]['angleX'] = isset($value_arr[1]) && is_numeric($value_arr[1]) ? $value_arr[1] / 100 : 0;
+                $data[$k]['angleY'] = isset($value_arr[2]) && is_numeric($value_arr[2]) ? $value_arr[2] / 100 : 0;
+                $data[$k]['deviceTemperature'] = isset($value_arr[3]) && is_numeric($value_arr[3]) ? $value_arr[3] / 100 : 0;
+            } catch (Exception $e) {
 
+            }
 
         }
         return $data;

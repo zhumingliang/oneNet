@@ -38,8 +38,8 @@ class DeviceService
         $data_arr = explode('|', $data);
         return [
             'create_time' => $info['create_time'],
-            'x' => is_numeric($data_arr[1]) ? $data_arr[1] / 100 : 0,
-            'y' => is_numeric($data_arr[2]) ? $data_arr[2] / 100 : 0
+            'x' => isset($data_arr[1]) && is_numeric($data_arr[1]) ? $data_arr[1] / 100 : 0,
+            'y' => isset($data_arr[2]) &&is_numeric($data_arr[2]) ? $data_arr[2] / 100 : 0
         ];
 
     }

@@ -43,7 +43,6 @@ return [
     // onMessage
     'onMessage' => function ($connection, $data) {
         $data = json_encode($data);
-        \app\api\model\LogT::create(['msg' =>$data]);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
             $connection->send(\think\facade\Request::param('msg'));

@@ -17,7 +17,7 @@ class ReceiveV
     public static function subQuery()
     {
         $subQuery = Db::table('onenet_receive_t')
-            ->field('imei,MAX(create_time) AS create_time')
+            ->field('imei,MAX(id) AS id')
             ->where('ds_id', '=', "3300_0_5751")
             ->group('date_format(create_time, "%Y-%m-%d"),imei')
             ->buildSql();
@@ -30,7 +30,7 @@ class ReceiveV
         $time_end = addDay(1, $endTime);
         $pagingData = Db::table('onenet_receive_t')
             ->alias('a')
-            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.create_time=b.create_time')
+            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.id=b.id')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
             ->whereBetweenTime('a.create_time', $time_begin, $time_end)
@@ -48,7 +48,7 @@ class ReceiveV
 
         $pagingData = Db::table('onenet_receive_t')
             ->alias('a')
-            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.create_time=b.create_time')
+            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.id=b.id')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
             ->whereBetweenTime('create_time', $time_begin, $time_end)
@@ -64,7 +64,7 @@ class ReceiveV
 
         $info = Db::table('onenet_receive_t')
             ->alias('a')
-            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.create_time=b.create_time')
+            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.id=b.id')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
             ->order('a.create_time desc')
