@@ -26,7 +26,6 @@ class ReceiveService
     public static function save($msg_arr)
     {
         try {
-            $msg_arr['state'] = 1;
             $ino = ReceiveT::create($msg_arr);
             if ($ino->type != 2) {
                 if ($ino->value == "IDLE") {
