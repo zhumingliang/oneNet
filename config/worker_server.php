@@ -56,10 +56,10 @@ return [
                 \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($this->request->param())]);
             }
             \app\api\service\ReceiveService::save($this->request->param('msg'));
-            $connection->send('success');
+
 
         }
-
+        $connection->send('success');
     },
     // onClose
     'onClose' => function ($connection) {
