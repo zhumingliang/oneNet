@@ -43,7 +43,7 @@ return [
     // onMessage
     'onMessage' => function ($connection, $data) {
        // $data = json_decode($data,true);
-        \app\api\model\LogT::create(['msg' => $data]);
+        \app\api\model\LogT::create(['msg' => json_encode($data)]);
         $msg = $data['post']['msg'];
         /* $raw_input = file_get_contents('php://input');
          \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);*/
