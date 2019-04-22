@@ -42,19 +42,19 @@ return [
     },
     // onMessage
     'onMessage' => function ($connection, $data) {
-        $raw_input = file_get_contents('php://input');
-        \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);
+       /* $raw_input = file_get_contents('php://input');
+        \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);*/
 
-        $resolved_body = \app\api\service\Util::resolveBody($raw_input);
+       // $resolved_body = \app\api\service\Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
-            $connection->send($resolved_body);
+            $connection->send($data['msg']);
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-            if (!$resolved_body) {
+           /* if (!$resolved_body) {
                 \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
-            }
-            \app\api\service\ReceiveService::save($this->request->param('msg'));
+            }*/
+            \app\api\service\ReceiveService::save($data['msg']);
 
 
         }
