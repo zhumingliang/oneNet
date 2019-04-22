@@ -206,7 +206,10 @@ class Index extends BaseController
 
     public function test()
     {
-
+        $data = '{"get":[],"post":{"msg":{"at":1555904805407,"imei":"861931046156398","type":1,"ds_id":"3300_0_5700","value":-115,"dev_id":523444202},"msg_signature":"9XFwVl4VRJ2Lub2ryUJK8g==","nonce":"C1z3?giR"},"cookie":[],"server":{"QUERY_STRING":"","REQUEST_METHOD":"POST","REQUEST_URI":"\/","SERVER_PROTOCOL":"HTTP\/1.1","SERVER_SOFTWARE":"workerman\/3.5.19","SERVER_NAME":"oil.mengant.cn","HTTP_HOST":"oil.mengant.cn:2345","HTTP_USER_AGENT":"OneNET","HTTP_ACCEPT":"","HTTP_ACCEPT_LANGUAGE":"","HTTP_ACCEPT_ENCODING":"*","HTTP_COOKIE":"","HTTP_CONNECTION":"Keep-Alive","CONTENT_TYPE":"application\/json","REMOTE_ADDR":"183.230.102.86","REMOTE_PORT":2613,"REQUEST_TIME":1555904805,"HTTP_CONTENT_TYPE":"application\/json; charset=utf-8","HTTP_CONTENT_LENGTH":"178","CONTENT_LENGTH":"178","SERVER_PORT":"2345"},"files":[]}';
+        $data = json_decode($data,true);
+        $msg = $data['post']['msg'];
+        print_r($msg);
     }
 
 
