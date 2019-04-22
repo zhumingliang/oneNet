@@ -44,17 +44,17 @@ return [
     'onMessage' => function ($connection, $data) {
        /* $raw_input = file_get_contents('php://input');
         \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($raw_input)]);*/
-var_dump($data);
        // $resolved_body = \app\api\service\Util::resolveBody($raw_input);
         if ($_SERVER['REQUEST_METHOD'] == "GET") {
             //初始化验证
             $connection->send($data['msg']);
 
         } else if ($_SERVER['REQUEST_METHOD'] == "POST") {
-           /* if (!$resolved_body) {
-                \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
-            }*/
-            \app\api\service\ReceiveService::save($data['msg']);
+            \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode(\think\facade\Request::param('msg'))]);
+            /* if (!$resolved_body) {
+                 \app\api\model\LogT::create(['msg' => "数据为空---" . json_encode($data)]);
+             }*/
+            //\app\api\service\ReceiveService::save(\think\facade\Request::param('msg'));
 
 
         }
