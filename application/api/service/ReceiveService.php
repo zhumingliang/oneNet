@@ -89,18 +89,12 @@ class ReceiveService
 
     private static function dataListFormat($data)
     {
-
-
         if (!count($data)) {
             return $data;
         }
         foreach ($data as $k => $v) {
             try {
                 $value = $v['value'];
-                if (strstr($value, 'x')) {
-                    unset($data[$k]);
-                    continue;
-                }
                 $value_arr = explode('|', $value);
                 unset($data[$k]['value']);
                 $data[$k]['angleX'] = isset($value_arr[1]) && is_numeric($value_arr[1]) ? $value_arr[1] / 100 : 0;

@@ -21,6 +21,7 @@ class ListV extends Model
         $pagingData = self::where('imei', '=', $imei)
             ->where('state', 1)
             ->whereBetweenTime('create_time', $time_begin, $time_end)
+            ->whereNotLike('value','%x%')
             ->field('id,imei,value,create_time')
             ->order('create_time desc')
             ->paginate($size, false, ['page' => $page])->toArray();
@@ -37,6 +38,7 @@ class ListV extends Model
         $pagingData = self::where('imei', '=', $imei)
             ->whereBetweenTime('create_time', $time_begin, $time_end)
             ->field('id,imei,create_time,value')
+            ->whereNotLike('value','%x%')
             ->order('create_time desc')
             ->select()->toArray();
         return $pagingData;
@@ -50,7 +52,7 @@ class ListV extends Model
             ->whereTime('create_time', 'today')
             ->field('id,imei,create_time,value')
             ->order('create_time desc')
-            ->select();
+            ->find();
         return $pagingData;
     }
 
