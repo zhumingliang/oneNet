@@ -98,6 +98,7 @@ class ReceiveService
             try {
                 $value = $v['value'];
                 if (strstr($value, 'x')) {
+                    unset($data[$k]);
                     continue;
                 }
                 $value_arr = explode('|', $value);
