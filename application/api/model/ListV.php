@@ -43,4 +43,15 @@ class ListV extends Model
 
     }
 
+
+    public static function getToday($imei)
+    {
+        $pagingData = self::where('imei', '=', $imei)
+            ->whereTime('create_time', 'today')
+            ->field('id,imei,create_time,value')
+            ->order('create_time desc')
+            ->select();
+        return $pagingData;
+    }
+
 }

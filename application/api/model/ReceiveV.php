@@ -24,20 +24,33 @@ class ReceiveV
         return $subQuery;
     }
 
+
+    public static function subQueryAll()
+    {
+        $subQuery = Db::table('onenet_receive_t')
+            ->field('imei,id')
+            ->where('ds_id', '=', "3300_0_5751")
+            ->group('date_format(create_time, "%Y-%m-%d"),imei')
+            ->buildSql();
+        return $subQuery;
+    }
+
     public static function getList($imei, $startTime, $endTime, $page, $size)
     {
         $time_begin = date("Y-m-d", strtotime($startTime));
         $time_end = addDay(1, $endTime);
         $pagingData = Db::table('onenet_receive_t')
             ->alias('a')
-            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.id=b.id')
+            ->join([self::subQueryAll() => 'b'], 'a.imei=b.imei and a.id=b.id')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
             ->whereBetweenTime('a.create_time', $time_begin, $time_end)
             ->field('a.id,a.imei,a.value,a.create_time')
             ->order('a.create_time desc')
-            ->paginate($size, false, ['page' => $page])->toArray();
-        return $pagingData;
+            ->fetchSql(true)
+            ->select();
+           // ->paginate($size, false, ['page' => $page])->toArray();
+        echo $pagingData;
 
     }
 
@@ -48,7 +61,7 @@ class ReceiveV
 
         $pagingData = Db::table('onenet_receive_t')
             ->alias('a')
-            ->join([self::subQuery() => 'b'], 'a.imei=b.imei and a.id=b.id')
+            ->join([self::subQueryAll() => 'b'], 'a.imei=b.imei and a.id=b.id')
             ->where('a.imei', '=', $imei)
             ->where('a.state', CommonEnum::SUCCESS)
             ->whereBetweenTime('create_time', $time_begin, $time_end)

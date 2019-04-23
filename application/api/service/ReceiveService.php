@@ -78,7 +78,7 @@ class ReceiveService
              $list['data'] = self::dataListFormat($data);
              return $list;   */
 
-        $list = ReceiveV::getList($imei, $startTime, $endTime, $page, $size);
+        $list = ListV::getList($imei, $startTime, $endTime, $page, $size);
         $data = $list['data'];
         $list['data'] = self::dataListFormat($data);
         return $list;
@@ -114,7 +114,7 @@ class ReceiveService
     public function exportData($imei, $startTime, $endTime)
     {
 
-        $list = ReceiveV::getListForExport($imei, $startTime, $endTime);
+        $list = ListV::getListForExport($imei, $startTime, $endTime);
         $list = self::dataListFormat($list);
         $header = array(
             'ID',

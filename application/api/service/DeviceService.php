@@ -26,21 +26,33 @@ class DeviceService
      */
     public function getCurrentValue($imei)
     {
-        $info = ReceiveV::getCurrentValue($imei);
-        if (!$info) {
-            return [
-                'create_time' => 0,
-                'x' => 0,
-                'y' => 0
-            ];
-        }
-        $data = $info['value'];
-        $data_arr = explode('|', $data);
-        return [
-            'create_time' => $info['create_time'],
-            'x' => isset($data_arr[1]) && is_numeric($data_arr[1]) ? $data_arr[1] / 100 : 0,
-            'y' => isset($data_arr[2]) &&is_numeric($data_arr[2]) ? $data_arr[2] / 100 : 0
+        $res = [
+            'create_time' => 0,
+            'x' => 0,
+            'y' => 0
         ];
+        $info = ListV::getToday($imei);
+        if (!count($info)) {
+            return $res;
+        }
+
+        foreach ($info as $k => $v) {
+
+            $data = $v['value'];
+            if (strstr($data, 'x')) {
+                continue;
+            }
+            $data_arr = explode('|', $data);
+            $res = [
+                'create_time' => $v['create_time'],
+                'x' => is_numeric($data_arr[1]) ? $data_arr[1] / 100 : 0,
+                'y' => is_numeric($data_arr[2]) ? $data_arr[2] / 100 : 0
+            ];
+            break;
+
+        }
+
+        return $res;
 
     }
 
