@@ -14,6 +14,7 @@ use app\api\validate\OneNetValidate;
 use app\lib\exception\OneNetException;
 use app\lib\exception\SuccessMessage;
 use think\Db;
+use think\facade\Request;
 
 class Index extends BaseController
 {
@@ -48,6 +49,8 @@ class Index extends BaseController
     public function realTime()
     {
         $param = $this->request->param();
+        $key = Request::header('api-key');
+        LogT::create(['msg'=>$key]);
         $x = $param['x'];
         $y = $param['y'];
         $t = $param['t'];
@@ -61,7 +64,6 @@ class Index extends BaseController
 
         ReceiveT::create($data);
         $interval = IntervalT::where('id', 1)->find();
-        LogT::create(['msg'=>$interval->interval]);
         return json([
             'interval' => $interval->interval
         ]);
