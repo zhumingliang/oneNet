@@ -46,9 +46,9 @@ class Index extends BaseController
     {
         $param = json_encode($this->request->param());
         LogT::create(['msg' => $param]);
-        return [
+        return json([
             'interval' => '30'
-        ];
+        ]);
     }
 
     /**
