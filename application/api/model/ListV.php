@@ -20,7 +20,8 @@ class ListV extends Model
 
         $pagingData = self::where('imei', '=', $imei)
             ->where('state', 1)
-            ->whereBetweenTime('create_time', $time_begin, $time_end)
+            //->whereBetweenTime('create_time', $time_begin, $time_end)
+            ->whereBetweenTime('create_time', $startTime, $endTime)
             ->whereNotLike('value','%x%')
             ->field('id,imei,value,create_time')
             ->order('create_time desc')
