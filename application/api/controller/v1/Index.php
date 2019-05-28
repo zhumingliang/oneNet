@@ -50,7 +50,6 @@ class Index extends BaseController
     {
         $param = $this->request->param();
         $key = Request::header('api-key');
-        LogT::create(['msg' => $key]);
         $x = $param['x'];
         $y = $param['y'];
         $t = $param['t'];
