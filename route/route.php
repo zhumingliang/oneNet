@@ -16,6 +16,7 @@ Route::get('think', function () {
 Route::rule('/', 'api/v1.Index/index');
 
 Route::rule('api/:version/index', 'api/:version.Index/index');
+Route::rule('api/:version/receive/realtime', 'api/:version.Index/realTime');
 Route::rule('api/:version/test', 'api/:version.Index/test');
 Route::get('api/:version/receive/list', 'api/:version.Index/getList');
 Route::get('api/:version/receive/recent', 'api/:version.Index/getRecent');
