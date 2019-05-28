@@ -61,6 +61,7 @@ class Index extends BaseController
 
         ReceiveT::create($data);
         $interval = IntervalT::where('id', 1)->find();
+        LogT::create(['msg'=>$interval->interval]);
         return json([
             'interval' => $interval->interval
         ]);
