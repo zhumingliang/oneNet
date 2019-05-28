@@ -50,13 +50,13 @@ class Index extends BaseController
     {
         $param = $this->request->param();
         $key = Request::header('api-key');
-        LogT::create(['msg'=>$key]);
+        LogT::create(['msg' => $key]);
         $x = $param['x'];
         $y = $param['y'];
         $t = $param['t'];
         $data = [
             'at' => time(),
-            'imei' => '123456789',
+            'imei' => $key,
             'type' => 1,
             'ds_id' => '3300_0_5751',
             'value' => 'N|' . $x . '|' . $y . '|' . $t . '|||||'
