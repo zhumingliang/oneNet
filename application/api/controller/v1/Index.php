@@ -4,6 +4,7 @@ namespace app\api\controller\v1;
 
 use app\api\controller\BaseController;
 use app\api\model\InitT;
+use app\api\model\IntervalT;
 use app\api\model\ReceiveT;
 use app\api\model\LogT;
 use app\api\service\ReceiveService;
@@ -39,26 +40,29 @@ class Index extends BaseController
     }
 
     /**
-     * 实时接受数据
-     * @return string
+     * @return \think\response\Json
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function realTime()
     {
         $param = $this->request->param();
-        $x=$param['x'];
-        $y=$param['y'];
-        $t=$param['t'];
-        $data=[
-            'at'=>time(),
-            'imei'=>'123456789',
-            'type'=>1,
-            'ds_id'=>'3300_0_5751',
-            'value'=>'N|'.$x.'|'.$y.'|'.$t.'|||||'
+        $x = $param['x'];
+        $y = $param['y'];
+        $t = $param['t'];
+        $data = [
+            'at' => time(),
+            'imei' => '123456789',
+            'type' => 1,
+            'ds_id' => '3300_0_5751',
+            'value' => 'N|' . $x . '|' . $y . '|' . $t . '|||||'
         ];
 
         ReceiveT::create($data);
+        $interval = IntervalT::where('id', 1)->find();
         return json([
-            'interval' => '30'
+            'interval' => $interval->interval
         ]);
     }
 
