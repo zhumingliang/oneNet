@@ -35,7 +35,6 @@ class DeviceService
         if (!count($info)) {
             return $res;
         }
-
         foreach ($info as $k => $v) {
 
             $data = $v['value'];

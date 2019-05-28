@@ -53,7 +53,7 @@ class ListV extends Model
             ->whereTime('create_time', 'today')
             ->field('id,imei,create_time,value')
             ->order('create_time desc')
-            ->find();
+            ->select()->toArray();
         return $pagingData;
     }
 
