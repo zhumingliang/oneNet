@@ -45,9 +45,9 @@ class Index extends BaseController
     public function realTime()
     {
         $param = $this->request->param();
-        $x=$param['x']*100;
-        $y=$param['y']*100;
-        $t=$param['t']*100;
+        $x=$param['x'];
+        $y=$param['y'];
+        $t=$param['t'];
         $data=[
             'at'=>time(),
             'imei'=>'123456789',
