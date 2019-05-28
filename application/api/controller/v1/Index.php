@@ -44,8 +44,19 @@ class Index extends BaseController
      */
     public function realTime()
     {
-        $param = json_encode($this->request->param());
-        LogT::create(['msg' => $param]);
+        $param = $this->request->param();
+        $x=$param['x']*100;
+        $y=$param['y']*100;
+        $t=$param['t']*100;
+        $data=[
+            'at'=>time(),
+            'imei'=>'123456789',
+            'type'=>1,
+            'ds_id'=>'3300_0_5751',
+            'value'=>'N|'.$x.'|'.$y.'|'.$t.'|||||'
+        ];
+
+        ReceiveT::create($data);
         return json([
             'interval' => '30'
         ]);
