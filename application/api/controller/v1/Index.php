@@ -44,8 +44,11 @@ class Index extends BaseController
      */
     public function realTime()
     {
-       $param=json_encode($this->request->param());
-       LogT::create(['msg'=>$param]);
+        $param = json_encode($this->request->param());
+        LogT::create(['msg' => $param]);
+        return [
+            'interval' => '30'
+        ];
     }
 
     /**
